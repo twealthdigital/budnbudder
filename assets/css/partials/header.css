@@ -3,37 +3,7 @@
    Promo bar, header/nav, search overlay, cart drawer
    ===================================================== */
 
-/* ---------- PROMO BAR ---------- */
-.promo-bar {
-  background: var(--color-yellow);
-  color: var(--color-black);
-}
-.promo-bar__inner {
-  max-width: var(--container);
-  margin-inline: auto;
-  padding: 8px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-.promo-bar__msg {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-.promo-bar__contact {
-  display: flex;
-  gap: 20px;
-}
-.promo-bar__contact a {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.72rem;
-  font-weight: 600;
-}
+
 
 /* ---------- HEADER ---------- */
 .site-header {
@@ -282,6 +252,11 @@
 }
 
 @media (max-width: 700px) {
-  .promo-bar__inner { flex-direction: column; gap: 6px; text-align: center; padding-block: 10px; }
-  .promo-bar__contact { gap: 14px; }
+
+}
+
+#siteHeaderInclude {
+  position: sticky;
+  top: 0;
+  z-index: 70;
 }

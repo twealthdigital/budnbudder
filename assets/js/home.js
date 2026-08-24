@@ -134,6 +134,7 @@
             <span class="product-card__price">${money(p.price)}</span>
             <button class="product-card__add" data-add="${p.id}" aria-label="Add ${p.name} to cart">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 6H5L6.3 15.6C6.4 16.6 7.3 17.3 8.3 17.3H17.4C18.4 17.3 19.2 16.6 19.4 15.7L20.9 8.6C21.1 7.9 20.5 7.2 19.8 7.2H5.6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              <span class="product-card__add-text">Added</span>
             </button>
           </div>
         </div>
@@ -157,7 +158,7 @@
       if (addBtn && addBtn.closest('.product-card')) {
         addToCart(addBtn.getAttribute('data-add'));
         addBtn.classList.add('is-added');
-        setTimeout(() => addBtn.classList.remove('is-added'), 900);
+        setTimeout(() => addBtn.classList.remove('is-added'), 1300);
         return;
       }
       const upBtn = e.target.closest('[data-qty-up]');
