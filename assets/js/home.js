@@ -123,7 +123,7 @@
         <div class="product-card__img">
           ${badgeMarkup(p.badge)}
           <div class="media-frame">
-            <img src="assets/images/products/${p.id}.jpg" alt="${p.name} — replace with product photography">
+            <img src="assets/images/products/${p.id}.png" alt="${p.name} — replace with product photography">
           </div>
         </div>
         <div class="product-card__body">

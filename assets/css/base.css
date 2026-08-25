@@ -82,6 +82,8 @@ body {
   background: var(--color-cream);
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
+  overflow-x: clip;
+  position: relative;
 }
 
 h1, h2, h3, h4 {

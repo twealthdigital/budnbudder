@@ -374,7 +374,7 @@
 .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-pop); }
 .product-card__img {
   position: relative;
-  aspect-ratio: 1 / 1;
+  height: 300px;
 }
 .product-card__badge {
   position: absolute;
