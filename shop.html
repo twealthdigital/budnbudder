@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop | Bud n' Budder — Astoria, NY</title>
+<meta name="description" content="Shop premium cannabis flower, edibles, vapes, concentrates and accessories at Bud n' Budder, Astoria, NY.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/partials/header.css">
+<link rel="stylesheet" href="assets/css/partials/footer.css">
+<link rel="stylesheet" href="assets/css/home.css">
+<link rel="stylesheet" href="assets/css/dropdowns.css">
+<link rel="stylesheet" href="assets/css/shop.css">
+</head>
+<body>
+
+<div id="siteHeaderInclude"></div>
+
+<main>
+
+  <!-- ============================= -->
+  <!-- SHOP HERO (same bg image/animation as home hero) -->
+  <!-- ============================= -->
+  <section class="hero hero--page">
+    <div class="hero__bg">
+      <img src="assets/images/herosectionimgg.png" alt="Premium cannabis flower — replace with product photography">
+    </div>
+    <div class="hero__inner">
+      <div class="hero__content">
+        <p class="eyebrow">Shop</p>
+        <h1 class="hero__title hero__title--page">Our Premium<br>Cannabis Products</h1>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb__sep">&gt;</span>
+          <span class="breadcrumb__current">Shop</span>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= -->
+  <!-- SHOP -->
+  <!-- ============================= -->
+  <section class="shop-section" id="shop">
+    <div class="shop-layout">
+
+      <!-- ===== SIDEBAR / OFF-CANVAS FILTER PANEL ===== -->
+      <aside class="shop-sidebar" id="shopSidebar">
+        <button type="button" class="btn btn--outline btn--block btn--sm" id="clearAllFilters" style="margin-bottom:22px;">Clear All Filters</button>
+
+        <div class="filter-block">
+          <h4>Search</h4>
+          <form class="filter-search" id="shopSearchForm">
+            <input type="text" id="shopSearchInput" placeholder="Search products…" autocomplete="off">
+            <button type="submit" class="btn btn--primary btn--block btn--sm">Search</button>
+          </form>
+        </div>
+
+        <div class="filter-block">
+          <div class="filter-block__head">
+            <h4>Categories</h4>
+
+          </div>
+          <!-- populated dynamically from product data — new categories added
+               to the product list in the future appear here automatically -->
+          <div class="category-list" id="categoryList"></div>
+        </div>
+
+        <div class="filter-block">
+          <h4>Filter By Price</h4>
+          <div class="price-slider" id="priceSlider">
+            <div class="price-slider__track">
+              <div class="price-slider__range" id="priceRangeFill"></div>
+            </div>
+            <input type="range" id="priceMin" class="price-slider__input" step="1">
+            <input type="range" id="priceMax" class="price-slider__input" step="1">
+          </div>
+          <div class="price-slider__labels">
+            <span id="priceMinLabel">$0</span>
+            <span id="priceMaxLabel">$0</span>
+          </div>
+          <button class="btn btn--primary btn--block btn--sm" id="priceFilterBtn">Filter</button>
+        </div>
+
+        <div class="delivery-promo">
+          <span class="delivery-promo__icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M2 6H14V16H2V6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 10H17.5L21 13.5V16H14V10Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="1.8" stroke="currentColor" stroke-width="1.4"/><circle cx="17.5" cy="18" r="1.8" stroke="currentColor" stroke-width="1.4"/></svg>
+          </span>
+          <h4>Free Same-Day Delivery</h4>
+          <p>On orders over $150 in NYC. Discreet &amp; Fast.</p>
+          <a href="#contact" class="btn btn--primary btn--sm">Learn More</a>
+        </div>
+      </aside>
+
+      <!-- ===== MAIN ===== -->
+      <div class="shop-main">
+
+        <button class="filter-toggle-btn" id="filterToggle" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 6H20M7 12H17M10 18H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Filters
+          <span class="filter-toggle-btn__count" id="filterCount" hidden>0</span>
+        </button>
+
+        <div class="shop-toolbar">
+          <p class="shop-toolbar__count" id="resultsCount">Showing 0 results</p>
+          <div class="shop-toolbar__sort">
+            <div class="custom-dropdown custom-dropdown--sm" id="toolbarSortDropdown">
+              <button type="button" class="custom-dropdown__toggle" id="toolbarSortToggle" aria-haspopup="listbox" aria-expanded="false">
+                <span id="toolbarSortLabel">Sort by: Default</span>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <ul class="custom-dropdown__menu" id="toolbarSortMenu" role="listbox">
+                <li role="option" data-value="default" class="is-selected">Sort by: Default</li>
+                <li role="option" data-value="price-asc">Price: Low to High</li>
+                <li role="option" data-value="price-desc">Price: High to Low</li>
+                <li role="option" data-value="bestsellers">Best Sellers</li>
+                <li role="option" data-value="newest">Newest</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- product cards use the same .product-card markup/classes as the
+             home page grid so styling and the add-to-cart button stay identical -->
+        <div class="product-grid shop-grid" id="shopProductGrid"></div>
+
+        <p class="shop-empty" id="shopEmpty" hidden>No products match your filters. Try clearing a few and searching again.</p>
+
+        <nav class="pagination" id="shopPagination" aria-label="Shop pagination"></nav>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="shop-sidebar__scrim" id="shopSidebarScrim"></div>
+
+<div id="siteFooterInclude"></div>
+
+<script src="assets/js/include.js"></script>
+<script src="assets/js/partials/header.js"></script>
+<script src="assets/js/partials/footer.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/shop.js"></script>
+</body>
+</html>

@@ -15,7 +15,7 @@
   const BEST_SELLERS = [
     { id: 'bs1', name: 'Runtz Flower', cat: 'Flower', type: 'flower', price: 45.0, rating: 4.8, reviews: 42, badge: 'new' },
     { id: 'bs2', name: 'CCELL M3 Battery', cat: 'Vaporizer', type: 'vapes', price: 20.0, rating: 4.7, reviews: 31, badge: null },
-    { id: 'bs3', name: 'Big Chief Gummies', cat: 'Edibles', type: 'edibles', price: 25.0, rating: 4.9, reviews: 27, badge: 'hot' },
+    { id: 'bs3', name: 'Big Chief Gummies', cat: 'Edibles', type: 'edibles', price: 25.0, rating: 4.9, reviews: 27, badge: 'bestseller' },
     { id: 'bs4', name: 'Jeeter Juice (Watermelon)', cat: 'Vape', type: 'vapes', price: 35.0, rating: 4.8, reviews: 36, badge: null }
   ];
 
@@ -81,7 +81,7 @@
       subtotal += p.price * qty;
       return `
         <div class="cart-line" data-id="${id}">
-          <div class="cart-line__thumb"></div>
+          <div class="cart-line__thumb"><img src="assets/images/products/${p.id}.png" alt="${p.name}"></div>
           <div class="cart-line__info">
             <span class="cart-line__name">${p.name}</span>
             <span class="cart-line__meta">${money(p.price)} / ${p.cat}</span>
@@ -108,7 +108,7 @@
   }
   function badgeMarkup(badge) {
     if (!badge) return '';
-    const label = badge === 'new' ? 'New' : 'Hot';
+    const label = badge === 'new' ? 'New' : 'Best Seller';
     return `<span class="product-card__badge product-card__badge--${badge}">${label}</span>`;
   }
   function renderGrid(targetSel, list) {
@@ -122,6 +122,10 @@
       <div class="product-card" data-id="${p.id}">
         <div class="product-card__img">
           ${badgeMarkup(p.badge)}
+          <a class="product-card__view" href="shop.html?cat=${encodeURIComponent(p.type)}&q=${encodeURIComponent(p.name)}" aria-label="View ${p.name} in the shop">
+            View
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
           <div class="media-frame">
             <img src="assets/images/products/${p.id}.png" alt="${p.name} — replace with product photography">
           </div>
@@ -132,10 +136,6 @@
           <div class="product-card__rating">${starRow(p.rating)} <span>${p.rating.toFixed(1)}</span></div>
           <div class="product-card__price-row">
             <span class="product-card__price">${money(p.price)}</span>
-            <button class="product-card__add" data-add="${p.id}" aria-label="Add ${p.name} to cart">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 6H5L6.3 15.6C6.4 16.6 7.3 17.3 8.3 17.3H17.4C18.4 17.3 19.2 16.6 19.4 15.7L20.9 8.6C21.1 7.9 20.5 7.2 19.8 7.2H5.6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-              <span class="product-card__add-text">Added</span>
-            </button>
           </div>
         </div>
       </div>
@@ -154,13 +154,6 @@
   /* ---------- PRODUCT-CARD / CART-LINE CLICK DELEGATION ---------- */
   function initProductClicks() {
     document.addEventListener('click', (e) => {
-      const addBtn = e.target.closest('[data-add]');
-      if (addBtn && addBtn.closest('.product-card')) {
-        addToCart(addBtn.getAttribute('data-add'));
-        addBtn.classList.add('is-added');
-        setTimeout(() => addBtn.classList.remove('is-added'), 1300);
-        return;
-      }
       const upBtn = e.target.closest('[data-qty-up]');
       if (upBtn) return changeQty(upBtn.getAttribute('data-qty-up'), 1);
       const downBtn = e.target.closest('[data-qty-down]');
@@ -198,20 +191,11 @@
         return;
       }
       results.innerHTML = matches.map((p) => `
-        <a class="search-result" data-add="${p.id}">
-          <span class="search-result__thumb"></span>
+        <a class="search-result" href="shop.html?cat=${encodeURIComponent(p.type)}&q=${encodeURIComponent(p.name)}">
           <span class="search-result__name">${p.name}</span>
           <span class="search-result__price">${money(p.price)}</span>
         </a>
       `).join('');
-    });
-
-    results.addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-add]');
-      if (!btn) return;
-      addToCart(btn.getAttribute('data-add'));
-      if (window.BNB && window.BNB.closeSearch) window.BNB.closeSearch();
-      if (window.BNB && window.BNB.openCart) window.BNB.openCart();
     });
   }
 

@@ -54,7 +54,7 @@ address { font-style: normal; }
 
   /* Badges */
   --badge-new: #34a561;
-  --badge-hot: #d8483d;
+  --badge-bestseller: #d8483d;
 
   /* Type */
   --font-heading: 'Sora', 'Segoe UI', sans-serif;
@@ -154,11 +154,16 @@ h1, h2, h3, h4 {
 .btn--outline-light:hover { border-color: var(--color-text-on-dark); background: rgba(255, 255, 255, 0.06); }
 
 .btn--outline {
+  background: var(--color-black);
+  color: var(--color-text-on-dark);
+  border: 1.5px solid var(--color-black);
+}
+
+.btn--outline:hover {
   background: transparent;
   color: var(--color-text);
-  border: 1.5px solid var(--color-border-dark);
+  border-color: var(--color-border-dark);
 }
-.btn--outline:hover { background: var(--color-black); color: var(--color-text-on-dark); }
 
 .btn--sm { padding: 11px 22px; font-size: 0.72rem; }
 .btn--block { width: 100%; }
