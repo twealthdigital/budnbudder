@@ -139,6 +139,7 @@
 }
 .price-slider__input::-webkit-slider-runnable-track { background: transparent; height: 4px; }
 .price-slider__input::-moz-range-track { background: transparent; height: 4px; }
+.price-slider__input:disabled { opacity: 1; }
 .price-slider__input::-webkit-slider-thumb {
   -webkit-appearance: none;
   pointer-events: auto;

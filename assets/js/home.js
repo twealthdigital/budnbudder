@@ -11,93 +11,12 @@
   const $ = (sel) => document.querySelector(sel);
   const money = (n) => '$' + n.toFixed(2);
 
-  /* ---------- PRODUCT DATA ---------- */
-  const BEST_SELLERS = [
-    { id: 'bs1', name: 'Runtz Flower', cat: 'Flower', type: 'flower', price: 45.0, rating: 4.8, reviews: 42, badge: 'new' },
-    { id: 'bs2', name: 'CCELL M3 Battery', cat: 'Vaporizer', type: 'vapes', price: 20.0, rating: 4.7, reviews: 31, badge: null },
-    { id: 'bs3', name: 'Big Chief Gummies', cat: 'Edibles', type: 'edibles', price: 25.0, rating: 4.9, reviews: 27, badge: 'bestseller' },
-    { id: 'bs4', name: 'Jeeter Juice (Watermelon)', cat: 'Vape', type: 'vapes', price: 35.0, rating: 4.8, reviews: 36, badge: null }
-  ];
-
-  const NEW_ARRIVALS = [
-    { id: 'na1', name: 'Sherbinski', cat: 'Flower', type: 'flower', price: 50.0, rating: 4.9, reviews: 19, badge: 'new' },
-    { id: 'na2', name: 'Packwoods Pre-Roll', cat: 'Pre-Roll', type: 'prerolls', price: 15.0, rating: 4.7, reviews: 22, badge: null },
-    { id: 'na3', name: 'Muha Meds Disposable', cat: 'Vape', type: 'vapes', price: 40.0, rating: 4.8, reviews: 18, badge: 'hot' },
-    { id: 'na4', name: 'Hidden Hills Bar', cat: 'Edibles', type: 'edibles', price: 30.0, rating: 4.8, reviews: 24, badge: 'new' }
-  ];
-
-  const ALL_PRODUCTS = [...BEST_SELLERS, ...NEW_ARRIVALS];
-  const CART_KEY = 'bnb_cart';
-
-  /* ---------- CART STORAGE ---------- */
-  function getCart() {
-    try { return JSON.parse(localStorage.getItem(CART_KEY)) || {}; }
-    catch (e) { return {}; }
-  }
-  function saveCart(cart) {
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
-    renderCart();
-  }
-  function cartCount(cart) {
-    return Object.values(cart).reduce((a, b) => a + b, 0);
-  }
-  function addToCart(id) {
-    const cart = getCart();
-    cart[id] = (cart[id] || 0) + 1;
-    saveCart(cart);
-  }
-  function changeQty(id, delta) {
-    const cart = getCart();
-    if (!cart[id]) return;
-    cart[id] += delta;
-    if (cart[id] <= 0) delete cart[id];
-    saveCart(cart);
-  }
-  function removeFromCart(id) {
-    const cart = getCart();
-    delete cart[id];
-    saveCart(cart);
-  }
-
-  function renderCart() {
-    const cart = getCart();
-    const badge = $('#cartBadge');
-    const itemsWrap = $('#cartItems');
-    const subtotalEl = $('#cartSubtotal');
-    if (badge) badge.textContent = cartCount(cart);
-    if (!itemsWrap) return;
-
-    const entries = Object.entries(cart);
-    if (!entries.length) {
-      itemsWrap.innerHTML = '<div class="cart-empty">Your cart is empty.<br>Add some products to get started.</div>';
-      if (subtotalEl) subtotalEl.textContent = money(0);
-      return;
-    }
-
-    let subtotal = 0;
-    itemsWrap.innerHTML = entries.map(([id, qty]) => {
-      const p = ALL_PRODUCTS.find((x) => x.id === id);
-      if (!p) return '';
-      subtotal += p.price * qty;
-      return `
-        <div class="cart-line" data-id="${id}">
-          <div class="cart-line__thumb"><img src="assets/images/products/${p.id}.png" alt="${p.name}"></div>
-          <div class="cart-line__info">
-            <span class="cart-line__name">${p.name}</span>
-            <span class="cart-line__meta">${money(p.price)} / ${p.cat}</span>
-            <div class="cart-line__row">
-              <div class="cart-line__qty">
-                <button data-qty-down="${id}" aria-label="Decrease quantity">−</button>
-                <span>${qty}</span>
-                <button data-qty-up="${id}" aria-label="Increase quantity">+</button>
-              </div>
-              <button class="cart-line__remove" data-remove="${id}">Remove</button>
-            </div>
-          </div>
-        </div>`;
-    }).join('');
-    if (subtotalEl) subtotalEl.textContent = money(subtotal);
-  }
+  /* ---------- PRODUCT DATA (shared catalog from header.js, split into
+     this page's two sections by id so it always matches the shop page
+     and the cart drawer) ---------- */
+  const ALL_PRODUCTS = window.BNB.getProducts();
+  const BEST_SELLERS = ALL_PRODUCTS.filter((p) => ['bs1', 'bs2', 'bs3', 'bs4'].includes(p.id));
+  const NEW_ARRIVALS = ALL_PRODUCTS.filter((p) => ['na1', 'na2', 'na3', 'na4'].includes(p.id));
 
   /* ---------- PRODUCT RENDERING ---------- */
   function starRow(rating) {
@@ -106,9 +25,10 @@
     for (let i = 1; i <= 5; i++) s += i <= full ? '★' : '☆';
     return s;
   }
+  const BADGE_LABELS = { new: 'New', bestseller: 'Best Seller', hot: 'Hot' };
   function badgeMarkup(badge) {
     if (!badge) return '';
-    const label = badge === 'new' ? 'New' : 'Best Seller';
+    const label = BADGE_LABELS[badge] || badge;
     return `<span class="product-card__badge product-card__badge--${badge}">${label}</span>`;
   }
   function renderGrid(targetSel, list) {
@@ -148,26 +68,6 @@
     } else {
       renderGrid('#bestSellersGrid', list);
       renderGrid('#newArrivalsGrid', []);
-    }
-  }
-
-  /* ---------- PRODUCT-CARD / CART-LINE CLICK DELEGATION ---------- */
-  function initProductClicks() {
-    document.addEventListener('click', (e) => {
-      const upBtn = e.target.closest('[data-qty-up]');
-      if (upBtn) return changeQty(upBtn.getAttribute('data-qty-up'), 1);
-      const downBtn = e.target.closest('[data-qty-down]');
-      if (downBtn) return changeQty(downBtn.getAttribute('data-qty-down'), -1);
-      const removeBtn = e.target.closest('[data-remove]');
-      if (removeBtn) return removeFromCart(removeBtn.getAttribute('data-remove'));
-    });
-
-    const checkoutBtn = $('#checkoutBtn');
-    if (checkoutBtn) {
-      checkoutBtn.addEventListener('click', () => {
-        if (!cartCount(getCart())) return;
-        alert('Checkout is coming soon! Your order will be ready for pickup or delivery confirmation shortly.');
-      });
     }
   }
 
@@ -264,10 +164,8 @@
      until those partials are fetched and injected. */
   document.addEventListener('partials:loaded', () => {
     renderProducts();
-    initProductClicks();
     initSearchResults();
     initCategoryFilter();
     initTestimonialDots();
-    renderCart();
   });
 })();

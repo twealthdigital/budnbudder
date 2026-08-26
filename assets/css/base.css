@@ -55,6 +55,7 @@ address { font-style: normal; }
   /* Badges */
   --badge-new: #34a561;
   --badge-bestseller: #d8483d;
+  --badge-hot: #e8730f;
 
   /* Type */
   --font-heading: 'Sora', 'Segoe UI', sans-serif;
@@ -211,4 +212,54 @@ h1, h2, h3, h4 {
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
+}
+
+/* ---------- AGE VERIFICATION GATE ---------- */
+.age-gate {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 12, 14, 0.97);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+body.age-gate-active { overflow: hidden; }
+.age-gate__box {
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-black-soft);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 40px 32px;
+  text-align: center;
+  color: var(--color-text-on-dark);
+}
+.age-gate__logo { display: inline-flex; width: 96px; height: 54px; margin-bottom: 18px; }
+.age-gate__logo img { width: 100%; height: 100%; object-fit: contain; }
+.age-gate__box h2 { font-size: 1.4rem; margin-bottom: 10px; color: #ffffff; }
+.age-gate__box p { font-size: 0.88rem; color: var(--color-text-on-dark-muted); line-height: 1.6; margin-bottom: 22px; }
+.age-gate__actions { display: flex; flex-direction: column; gap: 12px; }
+.age-gate__legal { margin-top: 18px; font-size: 0.72rem; }
+.age-gate__blocked h2 { color: var(--color-yellow); }
+
+.age-gate__actions .btn--outline:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-text-on-dark);
+  border-color: var(--color-text-on-dark-muted);
+}
+
+/* Pause all animations + freeze scroll while the age gate is showing */
+html.age-gate-active,
+body.age-gate-active {
+  overflow: hidden;
+  height: 100%;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+body.age-gate-active *,
+body.age-gate-active *::before,
+body.age-gate-active *::after {
+  animation-play-state: paused !important;
 }

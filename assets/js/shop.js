@@ -13,7 +13,6 @@
   const $ = (sel, ctx) => (ctx || document).querySelector(sel);
   const $$ = (sel, ctx) => Array.from((ctx || document).querySelectorAll(sel));
   const money = (n) => '$' + n.toFixed(2);
-  const CART_KEY = 'bnb_cart';
 
   /* =====================================================
      PRODUCT DATA
@@ -32,18 +31,7 @@
      re-run the filter/render pipeline, ready to be called from
      an admin panel or hooked to DELETE/POST endpoints.
      ===================================================== */
-  let PRODUCTS = [
-    { id: 'sp01', name: 'Runtz Flower', cat: 'Flower', type: 'flower', price: 45.00, rating: 4.8, reviews: 42, badge: 'new', image: 'assets/images/products/bs1.png' },
-    { id: 'sp02', name: "Packwoods Pre-Roll", cat: 'Pre-Roll', type: 'prerolls', price: 15.00, rating: 4.7, reviews: 22, badge: null, image: 'assets/images/products/na2.png' },
-    { id: 'sp03', name: 'Big Chief Gummies', cat: 'Edibles', type: 'edibles', price: 25.00, rating: 4.9, reviews: 27, badge: 'bestseller', image: 'assets/images/products/bs3.png' },
-    { id: 'sp04', name: 'CCELL M3 Battery', cat: 'Vaporizer', type: 'vapes', price: 20.00, rating: 4.7, reviews: 31, badge: null, image: 'assets/images/products/bs2.png' },
-    { id: 'sp05', name: 'Sherbinski', cat: 'Flower', type: 'flower', price: 50.00, rating: 4.9, reviews: 19, badge: 'new', image: 'assets/images/products/na1.png' },
-    { id: 'sp06', name: 'Hidden Hills Bar', cat: 'Edibles', type: 'edibles', price: 30.00, rating: 4.8, reviews: 24, badge: 'new', image: 'assets/images/products/na4.png' },
-    { id: 'sp07', name: 'Muha Meds Disposable', cat: 'Vape', type: 'vapes', price: 40.00, rating: 4.8, reviews: 18, badge: 'bestseller', image: 'assets/images/products/na3.png' },
-    { id: 'sp08', name: 'Jeeter Juice (Watermelon)', cat: 'Vape', type: 'vapes', price: 35.00, rating: 4.8, reviews: 36, badge: 'bestseller', image: 'assets/images/products/bs4.png' },
-    { id: 'sp09', name: 'Gelato Flower', cat: 'Flower', type: 'flower', price: 48.00, rating: 4.7, reviews: 15, badge: null, image: 'assets/images/products/bs1.png' },
-    { id: 'sp10', name: 'Grinder (4pc)', cat: 'Accessories', type: 'accessories', price: 25.00, rating: 4.6, reviews: 20, badge: null, image: 'assets/images/products/bs2.png' }
-  ];
+  let PRODUCTS = window.BNB.getProducts();
 
   function getProducts() { return PRODUCTS; }
 
@@ -90,96 +78,6 @@
      CART (same localStorage key/shape as home.js so the
      cart stays in sync across pages)
      ===================================================== */
-  function getCart() {
-    try { return JSON.parse(localStorage.getItem(CART_KEY)) || {}; }
-    catch (e) { return {}; }
-  }
-  function saveCart(cart) {
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
-    renderCart();
-  }
-  function cartCount(cart) { return Object.keys(cart).length; }
-  function addToCart(id) {
-    const cart = getCart();
-    cart[id] = (cart[id] || 0) + 1;
-    saveCart(cart);
-  }
-  function changeQty(id, delta) {
-    const cart = getCart();
-    if (!cart[id]) return;
-    cart[id] += delta;
-    if (cart[id] <= 0) delete cart[id];
-    saveCart(cart);
-  }
-  function removeFromCart(id) {
-    const cart = getCart();
-    delete cart[id];
-    saveCart(cart);
-  }
-  function renderCart() {
-    const cart = getCart();
-    const badge = $('#cartBadge');
-    const itemsWrap = $('#cartItems');
-    const subtotalEl = $('#cartSubtotal');
-    if (badge) badge.textContent = cartCount(cart);
-    if (!itemsWrap) return;
-
-    const entries = Object.entries(cart);
-    if (!entries.length) {
-      itemsWrap.innerHTML = '<div class="cart-empty">Your cart is empty.<br>Add some products to get started.</div>';
-      if (subtotalEl) subtotalEl.textContent = money(0);
-      return;
-    }
-    let subtotal = 0;
-    itemsWrap.innerHTML = entries.map(([id, qty]) => {
-      const p = PRODUCTS.find((x) => x.id === id);
-      if (!p) return '';
-      subtotal += p.price * qty;
-      return `
-        <div class="cart-line" data-id="${id}">
-          <div class="cart-line__thumb"><img src="${p.image}" alt="${p.name}"></div>
-          <div class="cart-line__info">
-            <span class="cart-line__name">${p.name}</span>
-            <span class="cart-line__meta">${money(p.price)} / ${p.cat}</span>
-            <div class="cart-line__row">
-              <div class="cart-line__qty">
-                <button data-qty-down="${id}" aria-label="Decrease quantity">−</button>
-                <span>${qty}</span>
-                <button data-qty-up="${id}" aria-label="Increase quantity">+</button>
-              </div>
-              <button class="cart-line__remove" data-remove="${id}">Remove</button>
-            </div>
-          </div>
-        </div>`;
-    }).join('');
-    if (subtotalEl) subtotalEl.textContent = money(subtotal);
-  }
-
-  function initCartAndProductClicks() {
-    document.addEventListener('click', (e) => {
-      const addBtn = e.target.closest('[data-add]');
-      if (addBtn && addBtn.closest('.product-card')) {
-        addToCart(addBtn.getAttribute('data-add'));
-        addBtn.classList.add('is-added');
-        setTimeout(() => addBtn.classList.remove('is-added'), 1300);
-        return;
-      }
-      const upBtn = e.target.closest('[data-qty-up]');
-      if (upBtn) return changeQty(upBtn.getAttribute('data-qty-up'), 1);
-      const downBtn = e.target.closest('[data-qty-down]');
-      if (downBtn) return changeQty(downBtn.getAttribute('data-qty-down'), -1);
-      const removeBtn = e.target.closest('[data-remove]');
-      if (removeBtn) return removeFromCart(removeBtn.getAttribute('data-remove'));
-    });
-    const checkoutBtn = $('#checkoutBtn');
-    if (checkoutBtn) {
-      checkoutBtn.addEventListener('click', () => {
-        if (!cartCount(getCart())) return;
-        alert('Checkout is coming soon! Your order will be ready for pickup or delivery confirmation shortly.');
-      });
-    }
-  }
-
   /* ---------- HEADER SEARCH OVERLAY RESULTS ---------- */
   function initSearchOverlayResults() {
     const input = $('#searchInput');
@@ -206,7 +104,7 @@
     results.addEventListener('click', (e) => {
       const btn = e.target.closest('[data-add]');
       if (!btn) return;
-      addToCart(btn.getAttribute('data-add'));
+      window.BNB.addToCart(btn.getAttribute('data-add'));
       if (window.BNB && window.BNB.closeSearch) window.BNB.closeSearch();
       if (window.BNB && window.BNB.openCart) window.BNB.openCart();
     });
@@ -259,33 +157,30 @@
   let priceBounds = { min: 0, max: 100 };
 
   function initPriceSlider() {
-    const prices = PRODUCTS.map((p) => p.price);
-    const dataMin = Math.floor(Math.min(...prices) / 5) * 5;
-    const dataMax = Math.ceil(Math.max(...prices) / 5) * 5;
-    priceBounds = { min: dataMin, max: dataMax };
+    priceBounds = { min: 10, max: 100 };
 
     const minInput = $('#priceMin');
     const maxInput = $('#priceMax');
     [minInput, maxInput].forEach((el) => {
       el.min = priceBounds.min;
       el.max = priceBounds.max;
+      el.step = 10;
     });
     minInput.value = priceBounds.min;
     maxInput.value = priceBounds.max;
+    minInput.disabled = true;
     state.priceMin = priceBounds.min;
     state.priceMax = priceBounds.max;
     renderPriceUI();
 
     function handleInput() {
-      let minV = parseInt(minInput.value, 10);
       let maxV = parseInt(maxInput.value, 10);
-      if (minV > maxV - 1) minV = maxV - 1 < priceBounds.min ? priceBounds.min : maxV - 1;
-      minInput.value = minV;
-      state.priceMin = minV;
+      maxV = Math.round(maxV / 10) * 10;
+      if (maxV < priceBounds.min + 10) maxV = priceBounds.min + 10;
+      maxInput.value = maxV;
       state.priceMax = maxV;
       renderPriceUI();
     }
-    minInput.addEventListener('input', handleInput);
     maxInput.addEventListener('input', handleInput);
 
     const filterBtn = $('#priceFilterBtn');
@@ -322,7 +217,8 @@
     'price-asc': 'Price: Low to High',
     'price-desc': 'Price: High to Low',
     bestsellers: 'Best Sellers',
-    newest: 'Newest'
+    newest: 'Newest',
+    hot: 'Hot'
   };
 
   function setSort(value) {
@@ -432,6 +328,9 @@ function initClearAllFilters() {
       case 'newest':
         list = list.slice().sort((a, b) => (b.badge === 'new' ? 1 : 0) - (a.badge === 'new' ? 1 : 0));
         break;
+      case 'hot':
+        list = list.slice().sort((a, b) => (b.badge === 'hot' ? 1 : 0) - (a.badge === 'hot' ? 1 : 0));
+        break;
       default: break; /* keep catalog order */
     }
     return list;
@@ -455,9 +354,10 @@ function initClearAllFilters() {
     for (let i = 1; i <= 5; i++) s += i <= full ? '★' : '☆';
     return s;
   }
+  const BADGE_LABELS = { new: 'New', bestseller: 'Best Seller', hot: 'Hot' };
   function badgeMarkup(badge) {
     if (!badge) return '';
-    const label = badge === 'new' ? 'New' : 'Best Seller';
+    const label = BADGE_LABELS[badge] || badge;
     return `<span class="product-card__badge product-card__badge--${badge}">${label}</span>`;
   }
   function renderGrid(pageItems) {
@@ -664,6 +564,17 @@ function initClearAllFilters() {
       const searchInput = $('#shopSearchInput');
       if (searchInput) searchInput.value = q;
     }
+
+    // "View All" links from the Best Sellers / New Arrivals sections on the
+    // home page land here with ?sort=bestsellers / ?sort=newest.
+    const sort = params.get('sort');
+    if (sort && SORT_LABELS[sort]) {
+      state.sort = sort;
+      const label = $('#toolbarSortLabel');
+      const menu = $('#toolbarSortMenu');
+      if (label) label.textContent = SORT_LABELS[sort];
+      if (menu) $$('li', menu).forEach((li) => li.classList.toggle('is-selected', li.getAttribute('data-value') === sort));
+    }
   }
 
   /* ---------- INIT ---------- */
@@ -681,13 +592,11 @@ function initClearAllFilters() {
     safe(initSidebarSearch);
     safe(initSort);
     safe(initClearAllFilters);
-    safe(initCartAndProductClicks);
     safe(initSearchOverlayResults);
     safe(initFilterDrawer);
     safe(initResponsivePaging);
     safe(initHeaderFooterCategoryLinks);
 
     safe(() => applyFilters(true));
-    safe(renderCart);
   });
 })();

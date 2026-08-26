@@ -15,6 +15,25 @@
 </head>
 <body>
 
+<!-- ============================= -->
+<!-- AGE VERIFICATION GATE -->
+<!-- ============================= -->
+<div class="age-gate" id="ageGate">
+  <div class="age-gate__box">
+    <span class="age-gate__logo">
+      <img src="assets/images/logo.png" alt="Bud n' Budder logo">
+    </span>
+    <h2>Are you 21 or older?</h2>
+    <p>You must be at least 21 years old to enter this site. Please verify your age to continue.</p>
+    <div class="age-gate__actions">
+      <button type="button" class="btn btn--primary btn--block" id="ageGateYes">Yes, I'm 21+</button>
+      <button type="button" class="btn btn--outline btn--block" id="ageGateNo">No, I'm under 21</button>
+    </div>
+    <p class="age-gate__legal">By entering this site you confirm you are of legal age to view cannabis-related content in your jurisdiction.</p>
+  </div>
+</div>
+<script src="assets/js/age-gate.js"></script>
+
 <div id="siteHeaderInclude"></div>
 
 <main>
@@ -31,8 +50,8 @@
 <h1 class="hero__title">Top Shelf.<br class="hero__break">Feel the Difference.<br class="hero__break"><span>Bud n' Budder.</span></h1>
 <p class="hero__desc">Your trusted cannabis shop in Astoria, NY.<br class="hero__break">Premium products. Good vibes. Always.</p>
         <div class="hero__actions">
-          <a href="#shop" class="btn btn--primary">Shop Now</a>
-          <a href="#about" class="btn btn--outline-light">Learn More</a>
+          <a href="shop.html" class="btn btn--primary">Shop Now</a>
+          <a href="about.html" class="btn btn--outline-light">Learn More</a>
         </div>
       </div>
     </div>
@@ -215,7 +234,7 @@
   <section class="product-section" id="shop">
     <div class="product-section__head reveal reveal--up">
       <h2 class="section-title">Best Sellers</h2>
-      <a href="#featured" class="btn btn--primary btn--sm">View All</a>
+      <a href="shop.html?sort=bestsellers" class="btn btn--primary btn--sm">View All</a>
     </div>
     <div class="product-grid reveal reveal--up" style="--reveal-delay:120ms" id="bestSellersGrid"><!-- injected by script.js --></div>
   </section>
@@ -226,7 +245,7 @@
   <section class="product-section" id="featured">
     <div class="product-section__head reveal reveal--up">
       <h2 class="section-title">New Arrivals</h2>
-      <a href="#featured" class="btn btn--primary btn--sm">View All</a>
+      <a href="shop.html?sort=newest" class="btn btn--primary btn--sm">View All</a>
     </div>
     <div class="product-grid reveal reveal--up" style="--reveal-delay:120ms" id="newArrivalsGrid"><!-- injected by script.js --></div>
   </section>
@@ -274,7 +293,7 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2.5L20 6V12C20 17 16.6 20.7 12 21.5C7.4 20.7 4 17 4 12V6L12 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 12.2L11.2 14.4L15.4 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Your satisfaction and safety are our top priorities
       </p>
-      <a href="#about">Learn more about our standards
+      <a href="about.html">Learn more about our Us
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
     </div>

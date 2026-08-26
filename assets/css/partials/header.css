@@ -101,6 +101,7 @@
   transition: color 0.15s ease, transform 0.15s ease;
 }
 .icon-btn:hover { color: var(--color-yellow); transform: translateY(-1px); }
+.icon-btn.is-active { color: var(--color-yellow); }
 .icon-btn--burger { display: none; }
 .cart-badge {
   position: absolute;
@@ -126,9 +127,21 @@
   overflow: hidden;
   max-height: 0;
   transition: max-height 0.25s ease;
+
+  /* NEW — take it out of flow so it overlays instead of pushing content */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 55; /* below header (60) isn't needed since it's a child, but keep it above page content */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
 }
-.mobile-menu.is-open { max-height: 320px; }
-.mobile-menu a {
+.mobile-menu.is-open { max-height: 640px; overflow-y: auto; }
+.mobile-menu a,
+.mobile-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
   padding: 14px 24px;
   font-family: var(--font-heading);
   font-weight: 600;
@@ -169,8 +182,15 @@
   background: transparent;
   color: var(--color-text-on-dark);
   font-size: 1.1rem;
+  border-radius: var(--radius-sm);
+  transition: box-shadow 0.15s ease;
+  height: 40px;
 }
 .search-overlay__top input::placeholder { color: var(--color-text-on-dark-muted); }
+.search-overlay__top input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-yellow-dark);
+}
 .search-overlay__close { color: var(--color-text-on-dark); }
 .search-overlay__hint { color: var(--color-text-on-dark-muted); margin-top: 18px; font-size: 0.9rem; }
 .search-overlay__results { margin-top: 6px; max-height: 50vh; overflow-y: auto; }
@@ -250,6 +270,57 @@
   .main-nav { display: none; }
   .icon-btn--burger { display: inline-flex; }
   .mobile-menu { display: flex; }
+  #accountDropdown { display: none; }
+}
+
+.mobile-menu .mobile-account__toggle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 14px 24px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-on-dark-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.mobile-account__toggle svg:first-child { flex-shrink: 0; }
+.mobile-account__chevron { margin-left: auto; transition: transform 0.2s ease; }
+.mobile-account.is-open .mobile-account__chevron { transform: rotate(180deg); }
+.mobile-account.is-open .mobile-account__toggle,
+.mobile-account__toggle.is-active { color: var(--color-yellow); }
+
+.mobile-account__menu {
+  max-height: 0;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+  transition: max-height 0.25s ease;
+}
+.mobile-account.is-open .mobile-account__menu { max-height: 320px; }
+.mobile-account__menu a,
+.mobile-account__menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 12px 24px 12px 46px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-on-dark-muted);
+}
+.mobile-account__menu [hidden] { display: none !important; }
+.mobile-account__user {
+  display: block;
+  padding: 12px 24px 12px 46px;
+  font-size: 0.8rem;
+  color: var(--color-text-on-dark);
 }
 
 @media (max-width: 700px) {
@@ -260,4 +331,45 @@
   position: sticky;
   top: 0;
   z-index: 70;
+}
+
+.account-dropdown { position: relative; }
+.account-dropdown__menu {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  background: var(--color-white);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-pop);
+  padding: 8px;
+  min-width: 170px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+  z-index: 90;
+}
+.account-dropdown.is-open .account-dropdown__menu {
+  opacity: 1; visibility: visible; transform: translateY(0);
+}
+.account-dropdown__item {
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: left;
+  width: 100%;
+}
+.account-dropdown__menu [hidden] { display: none !important; }
+.account-dropdown__item:hover { background: var(--color-cream-2); color: var(--color-yellow-dark); }
+.account-dropdown__user {
+  padding: 10px 14px 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 4px;
 }
