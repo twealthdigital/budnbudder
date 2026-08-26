@@ -177,23 +177,48 @@
     const drawer = $('#cartDrawer');
     if (!drawer) return;
     let startX = 0;
+    let startY = 0;
     let currentX = 0;
-    let dragging = false;
+    let tracking = false;   // touch is active, direction not decided yet
+    let dragging = false;   // confirmed horizontal drag
+    const DIRECTION_THRESHOLD = 10; // px of movement before we decide intent
 
     drawer.addEventListener('touchstart', (e) => {
       startX = e.touches[0].clientX;
-      dragging = true;
-      drawer.style.transition = 'none';
+      startY = e.touches[0].clientY;
+      currentX = 0;
+      tracking = true;
+      dragging = false;
     }, { passive: true });
 
     drawer.addEventListener('touchmove', (e) => {
-      if (!dragging) return;
-      currentX = e.touches[0].clientX - startX;
-      if (currentX < 0) currentX = 0;
+      if (!tracking) return;
+      const dx = e.touches[0].clientX - startX;
+      const dy = e.touches[0].clientY - startY;
+
+      if (!dragging) {
+        // Not yet decided: wait until movement is big enough to tell intent
+        if (Math.abs(dx) < DIRECTION_THRESHOLD && Math.abs(dy) < DIRECTION_THRESHOLD) return;
+
+        if (Math.abs(dx) > Math.abs(dy) && dx > 0) {
+          // Clearly a rightward horizontal swipe — take over from here
+          dragging = true;
+          drawer.style.transition = 'none';
+        } else {
+          // Vertical (or leftward) gesture — let the list scroll normally
+          tracking = false;
+          return;
+        }
+      }
+
+      // Confirmed horizontal drag: follow the finger, block page scroll
+      e.preventDefault();
+      currentX = dx < 0 ? 0 : dx;
       drawer.style.transform = `translateX(${currentX}px)`;
-    }, { passive: true });
+    }, { passive: false });
 
     drawer.addEventListener('touchend', () => {
+      tracking = false;
       if (!dragging) return;
       dragging = false;
       drawer.style.transition = '';
