@@ -1,0 +1,73 @@
+/* =====================================================
+   BUD N' BUDDER — success.css
+   Order-confirmation page only. Shown right after checkout,
+   before the "My Orders" page. Deliberately shows NO order
+   details (no order number, items, or totals) — just a
+   confirmation message and a single button through to
+   order.html. Relies on tokens/utilities from base.css.
+   ===================================================== */
+
+/* ---------- SECTION / LAYOUT ---------- */
+.success-section {
+  min-height: calc(100vh - 340px);
+  display: flex;
+  align-items: center;
+  padding: 70px 0;
+}
+.success-layout {
+  display: flex;
+  justify-content: center;
+}
+
+/* ---------- CARD ---------- */
+.success-card {
+  width: 100%;
+  max-width: 500px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 56px 44px;
+  text-align: center;
+}
+
+.success-card__icon {
+  width: 78px;
+  height: 78px;
+  margin: 0 auto 26px;
+  border-radius: 50%;
+  background: #e8f7ee;
+  border: 1px solid #bfe8cf;
+  color: #1f7a44;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-card__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 1.15rem + 1.2vw, 1.8rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+
+.success-card__sub {
+  color: var(--color-text-muted);
+  font-size: 0.94rem;
+  line-height: 1.65;
+  max-width: 38ch;
+  margin-inline: auto 28px;
+}
+
+.success-card__btn {
+  width: 100%;
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+@media (max-width: 700px) {
+  .success-section { padding: 44px 0; }
+  .success-card { padding: 40px 24px; border-radius: var(--radius-md); }
+}

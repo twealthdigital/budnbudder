@@ -174,8 +174,11 @@
     const btn = $('#pageCheckoutBtn');
     if (!btn) return;
     btn.addEventListener('click', () => {
-      if (!window.BNB.cartCount(window.BNB.getCart())) return;
-      alert('Checkout is coming soon! Your order will be ready for pickup or delivery confirmation shortly.');
+      if (!window.BNB.cartCount(window.BNB.getCart())) {
+        alert('Your cart is empty. Please add a product before checking out.');
+        return;
+      }
+      window.location.href = 'checkout.html';
     });
   }
 

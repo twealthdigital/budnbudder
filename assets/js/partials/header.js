@@ -300,12 +300,36 @@
       return;
     }
 
-    const NAV_MATCH = { 'index.html': 'Home', '': 'Home', 'shop.html': 'Shop' };
+    const NAV_MATCH = { 'index.html': 'Home', '': 'Home', 'shop.html': 'Shop', 'about.html': 'About' };
     const activeLabel = NAV_MATCH[path];
     if (!activeLabel) return;
     $$('.main-nav__link, .mobile-menu a').forEach((a) => {
       if (a.textContent.trim() === activeLabel) a.classList.add('is-active');
     });
+
+    if (path === 'about.html') initContactScrollSpy();
+  }
+
+  function initContactScrollSpy() {
+    const contactSection = document.getElementById('contact-form');
+    if (!contactSection || !('IntersectionObserver' in window)) return;
+
+    const aboutLinks = $$('.main-nav__link, .mobile-menu a').filter((a) => a.textContent.trim() === 'About');
+    const contactLinks = $$('.main-nav__link, .mobile-menu a').filter((a) => a.textContent.trim() === 'Contact');
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          aboutLinks.forEach((a) => a.classList.remove('is-active'));
+          contactLinks.forEach((a) => a.classList.add('is-active'));
+        } else {
+          contactLinks.forEach((a) => a.classList.remove('is-active'));
+          aboutLinks.forEach((a) => a.classList.add('is-active'));
+        }
+      });
+    }, { threshold: 0.4 });
+
+    io.observe(contactSection);
   }
 
   function initAccountDropdown() {
