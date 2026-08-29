@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard | Bud n' Budder Admin</title>
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/admin-base.css">
+<link rel="stylesheet" href="assets/css/admin-products.css">
+</head>
+<body class="admin" data-page="products">
+
+<div class="admin-shell">
+
+  <!-- ============================= -->
+  <!-- SIDEBAR -->
+  <!-- ============================= -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-brand">
+      <img src="assets/img/logo.png" alt="Bud n' Budder" class="admin-brand__mark">
+      <span class="admin-brand__text">
+        <span class="admin-brand__name">Bud n' Budder</span>
+        <span class="admin-brand__tag">Admin Panel</span>
+      </span>
+      <button type="button" class="admin-sidebar__close" id="adminSidebarClose" aria-label="Close menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="admin-nav" aria-label="Admin navigation">
+      <a href="admin-dashboard.html" class="admin-nav__link" data-page="dashboard">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="13" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="3" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="13" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.7"/></svg>
+        Dashboard
+      </a>
+      <a href="admin-products.html" class="admin-nav__link" data-page="products">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 8L12 3L21 8V16L12 21L3 16V8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 8L12 13L21 8M12 13V21" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        Products
+      </a>
+      <a href="admin-orders.html" class="admin-nav__link" data-page="orders">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 8H20L19 20H5L4 8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 8V6C8 3.79 9.79 2 12 2C14.21 2 16 3.79 16 6V8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        Orders
+      </a>
+      <a href="admin-transactions.html" class="admin-nav__link" data-page="transactions">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="5.5" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 9.5H21" stroke="currentColor" stroke-width="1.6"/></svg>
+        Transactions
+      </a>
+    </nav>
+
+    <div class="admin-sidebar__foot">
+      <button type="button" class="admin-logout" id="adminLogoutBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3H9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12H9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <div class="admin-scrim" id="adminScrim"></div>
+
+  <!-- ============================= -->
+  <!-- MAIN -->
+  <!-- ============================= -->
+  <main class="admin-main">
+    <div class="admin-content">
+
+      <!-- ===== TOPBAR ===== -->
+      <div class="admin-topbar">
+        <div style="display:flex; align-items:flex-start; gap:10px;">
+          <button type="button" class="admin-sidebar-toggle" id="adminSidebarToggle" aria-label="Open menu">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <div class="admin-topbar__heading">
+            <h1 class="admin-topbar__title">Products</h1>
+            <p class="admin-topbar__welcome">Managing <strong id="productCountLabel">0</strong> products across <strong id="categoryCountLabel">0</strong> categories</p>
+          </div>
+        </div>
+
+        <div class="admin-topbar__actions">
+          <div class="admin-notif" id="adminNotif">
+            <button type="button" class="admin-icon-btn" id="notifBellBtn" aria-label="Notifications">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9.5C6 6.19 8.24 3.5 12 3.5C15.76 3.5 18 6.19 18 9.5C18 15 20 16.5 20 16.5H4C4 16.5 6 15 6 9.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9.5 19.5C9.8 20.4 10.8 21 12 21C13.2 21 14.2 20.4 14.5 19.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <span class="admin-icon-btn__badge" id="bellBadge">3</span>
+            </button>
+            <div class="admin-notif__menu">
+              <div class="admin-notif__head"><h4>Notifications</h4></div>
+              <div class="admin-notif__list" id="notifList"></div>
+            </div>
+          </div>
+
+          <div class="admin-account" id="adminAccount">
+            <button type="button" class="admin-account__toggle" id="adminAccountToggle">
+              <span class="admin-account__avatar">BB</span>
+              <span class="admin-account__name">Admin</span>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="admin-account__menu">
+              <div class="admin-account__label">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 20C5.5 16.5 8.4 15 12 15C15.6 15 18.5 16.5 19.5 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                Admin
+              </div>
+              <button type="button" class="admin-account__item" id="adminAccountLogout">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                Sign Out
+              </button>
+            </div>
+          </div>
+
+          <button type="button" class="admin-btn admin-btn--primary" id="addProductBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+            Add Product
+          </button>
+        </div>
+      </div>
+
+      <button type="button" class="mobile-add-product" id="addProductBtnMobile">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        Add New Product
+      </button>
+
+      <!-- ===== FILTER TOOLBAR ===== -->
+      <section class="admin-card products-filter" aria-label="Filter products">
+        <div class="products-filter__row">
+
+          <div class="products-search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21L16.5 16.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input type="text" id="productSearchInput" placeholder="Search products…" aria-label="Search products">
+          </div>
+
+          <div class="field-dropdown" id="categoryFilterDropdown">
+            <button type="button" class="field-dropdown__toggle" id="categoryFilterToggle">
+              <span id="categoryFilterLabel">All Categories</span>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="field-dropdown__menu" id="categoryFilterMenu"><!-- injected by products.js --></div>
+          </div>
+
+          <div class="price-filter">
+            <label for="priceMinInput">Price</label>
+            <input type="number" id="priceMinInput" placeholder="Min" min="0" inputmode="decimal">
+            <span class="price-filter__sep">–</span>
+            <input type="number" id="priceMaxInput" placeholder="Max" min="0" inputmode="decimal">
+          </div>
+
+          <button type="button" class="admin-btn admin-btn--dark products-filter__clear" id="clearFiltersBtn">Clear Filters</button>
+        </div>
+      </section>
+
+<!-- ===== CATEGORY SIDEBAR + PRODUCTS LAYOUT ===== -->
+<div class="products-layout">
+  <!-- Category Sidebar -->
+  <aside class="category-sidebar">
+    <div class="category-sidebar__head">
+      <h3>Categories</h3>
+      <button type="button" class="admin-btn admin-btn--primary" id="addCategoryBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        Add
+      </button>
+    </div>
+    <div class="category-sidebar__list" id="categorySidebarList">
+      <!-- injected by products.js -->
+    </div>
+  </aside>
+
+  <!-- Products Area -->
+  <div class="products-area">
+    <div id="productCategorySections"><!-- injected by products.js --></div>
+    <div class="dash-empty" id="noResultsState" hidden>No products match your filters.</div>
+  </div>
+</div>
+
+<!-- ===== ADD / EDIT PRODUCT MODAL ===== -->
+<div class="notif-modal-overlay" id="productModalOverlay">
+  <div class="notif-modal product-modal" id="productModal" role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
+    <button type="button" class="notif-modal__close" id="productModalClose" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <h4 class="notif-modal__title" id="productModalTitle">Add Product</h4>
+
+    <form id="productForm" novalidate>
+      <input type="hidden" id="productIdInput">
+
+      <div class="form-group">
+        <label for="productNameInput">Product Name</label>
+        <input type="text" id="productNameInput" placeholder="e.g. OG Kush 3.5g" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Category</label>
+          <div class="field-dropdown" id="formCategoryDropdown">
+            <button type="button" class="field-dropdown__toggle" id="formCategoryToggle">
+              <span id="formCategoryLabel">Select category</span>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="field-dropdown__menu" id="formCategoryMenu"><!-- injected --></div>
+          </div>
+          <input type="hidden" id="productCategoryInput" required>
+        </div>
+
+        <div class="form-group">
+          <label>Status</label>
+          <div class="field-dropdown" id="formStatusDropdown">
+            <button type="button" class="field-dropdown__toggle" id="formStatusToggle">
+              <span id="formStatusLabel">Active</span>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="field-dropdown__menu" id="formStatusMenu">
+              <button type="button" class="field-dropdown__item" data-value="active">Active</button>
+              <button type="button" class="field-dropdown__item" data-value="draft">Draft</button>
+            </div>
+          </div>
+          <input type="hidden" id="productStatusInput" value="active">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Product Tag</label>
+        <div class="field-dropdown" id="formTagDropdown">
+          <button type="button" class="field-dropdown__toggle" id="formTagToggle">
+            <span id="formTagLabel">New</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="field-dropdown__menu" id="formTagMenu"><!-- injected --></div>
+        </div>
+        <input type="hidden" id="productTagTypeInput" value="new">
+        <input type="hidden" id="productTagLabelInput" value="New">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="productPriceInput">Price ($)</label>
+          <input type="number" id="productPriceInput" placeholder="0.00" min="0" step="0.01" required>
+        </div>
+        <div class="form-group">
+          <label for="productStockInput">Stock</label>
+          <input type="number" id="productStockInput" placeholder="0" min="0" step="1" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Product Image</label>
+        <div class="image-upload" id="imageUploadWrap">
+          <img class="image-upload__preview" id="productImagePreviewImg" alt="" hidden>
+          <span class="image-upload__placeholder" id="imageUploadPlaceholder">No image selected</span>
+          <button type="button" class="admin-btn admin-btn--ghost" id="imageUploadBtn">Choose Image</button>
+          <input type="file" id="productImageFile" accept="image/*" hidden>
+        </div>
+        <input type="hidden" id="productImageInput">
+      </div>
+
+      <p class="form-error" id="productFormError" hidden></p>
+
+      <div class="form-actions">
+        <button type="button" class="admin-btn admin-btn--ghost" id="productCancelBtn">Cancel</button>
+        <button type="submit" class="admin-btn admin-btn--primary">Save Product</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== CUSTOM TAG MODAL ===== -->
+<div class="notif-modal-overlay" id="tagModalOverlay">
+  <div class="notif-modal category-modal" id="tagModal" role="dialog" aria-modal="true" aria-labelledby="tagModalTitle">
+    <button type="button" class="notif-modal__close" id="tagModalClose" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <h4 class="notif-modal__title" id="tagModalTitle">Custom Product Tag</h4>
+
+    <form id="tagForm" novalidate>
+      <div class="form-group">
+        <label for="tagCustomLabelInput">Tag Text</label>
+        <input type="text" id="tagCustomLabelInput" placeholder="e.g. Limited Edition" required>
+      </div>
+
+      <p class="form-error" id="tagFormError" hidden></p>
+
+      <div class="form-actions">
+        <button type="button" class="admin-btn admin-btn--ghost" id="tagCancelBtn">Cancel</button>
+        <button type="submit" class="admin-btn admin-btn--primary">Save Tag</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== DELETE CONFIRM MODAL ===== -->
+<div class="notif-modal-overlay" id="confirmModalOverlay">
+  <div class="notif-modal confirm-modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
+    <h4 class="notif-modal__title" id="confirmModalTitle">Delete this product?</h4>
+    <p class="notif-modal__text" id="confirmModalText">This action can't be undone.</p>
+    <div class="confirm-modal__actions">
+      <button type="button" class="admin-btn admin-btn--ghost" id="confirmCancelBtn">Cancel</button>
+      <button type="button" class="admin-btn admin-btn--dark" id="confirmDeleteBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADD/EDIT CATEGORY MODAL ===== -->
+<div class="notif-modal-overlay" id="categoryModalOverlay">
+  <div class="notif-modal category-modal" id="categoryModal" role="dialog" aria-modal="true" aria-labelledby="categoryModalTitle">
+    <button type="button" class="notif-modal__close" id="categoryModalClose" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <h4 class="notif-modal__title" id="categoryModalTitle">Add Category</h4>
+
+    <form id="categoryForm" novalidate>
+      <input type="hidden" id="categoryIdInput">
+
+      <div class="form-group">
+        <label for="categoryNameInput">Category Name</label>
+        <input type="text" id="categoryNameInput" placeholder="e.g. Tinctures" required>
+      </div>
+
+      <div class="form-group">
+        <label for="categoryIconInput">Icon</label>
+        <select class="form-select" id="categoryIconInput">
+          <option value="flower">Flower</option>
+          <option value="vape">Vape</option>
+          <option value="edibles">Edibles</option>
+          <option value="pre-roll">Pre-Roll</option>
+          <option value="concentrates">Concentrates</option>
+          <option value="accessories">Accessories</option>
+          <option value="default">Default</option>
+        </select>
+      </div>
+
+      <p class="form-error" id="categoryFormError" hidden></p>
+
+      <div class="form-actions">
+        <button type="button" class="admin-btn admin-btn--ghost" id="categoryCancelBtn">Cancel</button>
+        <button type="submit" class="admin-btn admin-btn--primary">Save Category</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== DELETE CATEGORY CONFIRM MODAL ===== -->
+<div class="notif-modal-overlay" id="deleteCategoryModalOverlay">
+  <div class="notif-modal confirm-modal" id="deleteCategoryModal" role="dialog" aria-modal="true" aria-labelledby="deleteCategoryModalTitle">
+    <h4 class="notif-modal__title" id="deleteCategoryModalTitle">Delete this category?</h4>
+    <p class="notif-modal__text" id="deleteCategoryModalText">This action can't be undone.</p>
+    <div class="confirm-modal__actions">
+      <button type="button" class="admin-btn admin-btn--ghost" id="cancelDeleteCategoryBtn">Cancel</button>
+      <button type="button" class="admin-btn admin-btn--dark" id="confirmDeleteCategoryBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/admin-main.js"></script>
+<script src="assets/js/admin-products.js"></script>
+</body>
+</html>

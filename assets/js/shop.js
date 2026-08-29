@@ -381,7 +381,6 @@ function initClearAllFilters() {
         <div class="product-card__body">
           <span class="product-card__cat">${p.cat}</span>
           <div class="product-card__name">${p.name}</div>
-          <div class="product-card__rating">${starRow(p.rating)} <span>${p.rating.toFixed(1)}</span></div>
           <div class="product-card__price-row">
             <span class="product-card__price">${money(p.price)}</span>
             <button class="product-card__add" data-add="${p.id}" aria-label="Add ${p.name} to cart">
