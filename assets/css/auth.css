@@ -17,11 +17,19 @@
 .auth-visual {
   position: relative;
   background: var(--color-black);
-  color: var(--color-text-on-dark);
+  color: var(--color-white);
   display: flex;
   align-items: center;
   overflow: hidden;
   border-bottom-right-radius: var(--radius-lg);
+}
+
+.auth-visual__title {
+  color: var(--color-white);
+}
+
+.auth-visual__title span {
+  color: var(--color-yellow);
 }
 .auth-visual__bg {
   position: absolute;

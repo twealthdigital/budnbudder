@@ -1,0 +1,257 @@
+/* =====================================================
+   BUD N' BUDDER — legal.css
+   Shared styling for legal/policy pages (Privacy Policy,
+   Terms). Dark image hero + sticky sidebar table of
+   contents alongside numbered long-form content.
+   ===================================================== */
+
+/* ---------- HERO ---------- */
+.legal-hero {
+  background: var(--color-black);
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 20px 20px;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+}
+.legal-hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.legal-hero__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.legal-hero__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(12,12,14,0.96) 0%, rgba(12,12,14,0.82) 40%, rgba(12,12,14,0.32) 100%);
+}
+.legal-hero__inner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding: 56px 24px;
+  width: 100%;
+}
+.legal-hero__text { max-width: 540px; }
+.legal-hero .eyebrow { color: var(--color-yellow); }
+.legal-hero__title {
+  color: var(--color-text-on-dark);
+  margin-top: 12px;
+  font-size: clamp(1.8rem, 1.4rem + 1.8vw, 2.5rem);
+}
+.legal-hero__desc {
+  color: var(--color-text-on-dark-muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin-top: 14px;
+  max-width: 460px;
+}
+
+/* ---------- CONTENT WRAP ---------- */
+.legal-content {
+  background: var(--color-cream);
+  padding: 40px 0 90px;
+}
+.legal-content__inner {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+/* ---------- BACK BUTTON ROW (sits above sidebar) ---------- */
+.legal-back-row { margin-bottom: 28px; }
+.legal-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  background: transparent;
+  border: 1.5px solid var(--color-border-dark);
+  border-radius: var(--radius-pill);
+  padding: 10px 18px 10px 14px;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+.legal-back svg { flex-shrink: 0; }
+.legal-back:hover {
+  background: var(--color-yellow);
+  border-color: var(--color-yellow);
+}
+.legal-back:active { transform: translateY(1px); }
+.legal-back-row__caption {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+/* ---------- TWO-COLUMN LAYOUT ---------- */
+.legal-layout {
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  gap: 56px;
+  align-items: start;
+}
+.legal-sidebar { min-width: 0; }
+.legal-sidebar__sticky {
+  position: sticky;
+  top: 104px;
+}
+
+/* ---------- TOC BOX ---------- */
+.legal-toc {
+  background: var(--color-cream-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+.legal-toc h4 {
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 14px;
+}
+.legal-toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.legal-toc__link {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  padding: 6px 10px;
+  border-left: 2px solid transparent;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.83rem;
+  line-height: 1.4;
+  color: var(--color-text-soft);
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+.legal-toc__link:hover {
+  color: var(--color-text);
+  background: rgba(0, 0, 0, 0.03);
+}
+.legal-toc__link.is-active {
+  color: var(--color-yellow-dark);
+  border-left-color: var(--color-yellow-dark);
+  background: rgba(255, 198, 41, 0.12);
+  font-weight: 700;
+}
+.legal-toc__num { flex-shrink: 0; opacity: 0.75; }
+
+/* ---------- CONTENT / SECTIONS ---------- */
+.legal-doc { min-width: 0; }
+
+.legal-section { scroll-margin-top: 104px; }
+.legal-section + .legal-section { margin-top: 34px; }
+
+.legal-section h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 1.28rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.legal-section h2 .legal-num { color: var(--color-yellow-dark); }
+
+.legal-section h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  color: var(--color-text);
+}
+
+.legal-section p {
+  color: var(--color-text-soft);
+  font-size: 0.96rem;
+  line-height: 1.75;
+  margin-bottom: 12px;
+}
+
+.legal-section ul {
+  margin: 0 0 14px;
+  padding: 0;
+}
+.legal-section ul li {
+  position: relative;
+  list-style: none;
+  padding-left: 20px;
+  color: var(--color-text-soft);
+  font-size: 0.94rem;
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+.legal-section ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-yellow-dark);
+}
+
+.legal-section strong { color: var(--color-text); font-weight: 700; }
+
+.legal-section a {
+  color: var(--color-yellow-dark);
+  text-decoration: underline;
+  text-decoration-color: rgba(232, 172, 0, 0.4);
+  text-underline-offset: 2px;
+}
+.legal-section a:hover { color: var(--color-text); }
+
+.legal-doc__contact {
+  margin-top: 6px;
+  padding: 18px 20px;
+  background: var(--color-cream-2);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+.legal-doc__contact p { margin-bottom: 4px; font-size: 0.9rem; }
+.legal-doc__contact p:last-child { margin-bottom: 0; }
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .legal-layout {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .legal-sidebar__sticky { position: static; }
+  .legal-toc ol {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .legal-toc__link {
+    border-left: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    padding: 5px 12px;
+  }
+  .legal-toc__link.is-active {
+    border-color: var(--color-yellow-dark);
+    background: rgba(255, 198, 41, 0.16);
+  }
+}
+@media (max-width: 640px) {
+  .legal-hero__inner { padding: 40px 20px; }
+}
