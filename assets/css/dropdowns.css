@@ -1,0 +1,123 @@
+/* =====================================================
+   BUD N' BUDDER — dropdowns.css
+   Site-wide <select> styling. Any <select> anywhere on the
+   site (shop sort, future filters, forms, etc.) picks this up
+   automatically — no extra class required. Depends on the
+   tokens defined in base.css, so load this AFTER base.css.
+   ===================================================== */
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--color-text);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 34px 10px 14px;
+  min-height: 42px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='%231b1c17' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+select:hover { border-color: var(--color-yellow-dark); }
+select:focus-visible {
+  outline: none;
+  border-color: var(--color-yellow-dark);
+  box-shadow: 0 0 0 3px rgba(232, 172, 0, 0.18);
+}
+select:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* Compact variant — for tight spaces like toolbars/filters */
+select.dropdown--sm {
+  min-height: 36px;
+  padding: 7px 30px 7px 12px;
+  font-size: 0.78rem;
+}
+
+/* Dark variant — for selects placed on dark sections (hero, footer, cart) */
+select.dropdown--dark {
+  background-color: var(--color-black-soft);
+  border-color: rgba(245, 244, 238, 0.18);
+  color: var(--color-text-on-dark);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='%23f5f4ee' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+select.dropdown--dark:hover { border-color: var(--color-yellow); }
+select.dropdown--dark option { color: var(--color-text); }
+
+/* Full-width variant */
+select.dropdown--block { width: 100%; }
+
+/* Firefox: trims the default inner dotted focus ring */
+select::-moz-focus-inner { border: 0; }
+
+/* Windows/Firefox native option list can't be restyled — keep options plain */
+select option { color: var(--color-text); }
+
+/* ---------- CUSTOM DROPDOWN (replaces native <select> where the option
+   list itself needs full brand styling, e.g. shop sort) ---------- */
+.custom-dropdown { position: relative; }
+.custom-dropdown__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 14px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.custom-dropdown__toggle svg { flex-shrink: 0; color: var(--color-text-muted); transition: transform 0.2s ease; }
+.custom-dropdown__toggle:hover { border-color: var(--color-yellow-dark); }
+.custom-dropdown.is-open .custom-dropdown__toggle {
+  border-color: var(--color-yellow-dark);
+  box-shadow: 0 0 0 3px rgba(232, 172, 0, 0.18);
+}
+.custom-dropdown.is-open .custom-dropdown__toggle svg { transform: rotate(180deg); }
+
+.custom-dropdown__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 100%;
+  width: max-content;
+  max-width: 240px;
+  background: var(--color-white);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-pop);
+  padding: 6px;
+  z-index: 40;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+  list-style: none;
+  margin: 0;
+}
+.custom-dropdown.is-open .custom-dropdown__menu { opacity: 1; visibility: visible; transform: translateY(0); }
+.custom-dropdown__menu li {
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+.custom-dropdown__menu li:hover { background: var(--color-cream-2); }
+.custom-dropdown__menu li.is-selected { background: var(--color-yellow); color: var(--color-black); }
+
+.custom-dropdown--sm .custom-dropdown__toggle { min-height: 36px; padding: 7px 12px; font-size: 0.78rem; }
