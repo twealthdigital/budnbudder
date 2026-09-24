@@ -493,7 +493,12 @@
       Sort the real backend products by createdAt.
     */
 
-    NEW_ARRIVALS = [...ALL_PRODUCTS]
+    const bestSellerIds = new Set(
+      BEST_SELLERS.map((product) => product.id)
+    );
+
+    NEW_ARRIVALS = ALL_PRODUCTS
+      .filter((product) => !bestSellerIds.has(product.id))
       .sort((a, b) => {
         const dateA = new Date(a.createdAt || 0).getTime();
         const dateB = new Date(b.createdAt || 0).getTime();
