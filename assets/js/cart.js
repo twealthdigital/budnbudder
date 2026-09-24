@@ -745,7 +745,7 @@
      REMOVE CART ITEM
      ===================================================== */
 
-  async function removeItem(productId) {
+  async function removeItem(productId, triggerButton) {
     if (!productId || loading) {
       return;
     }
@@ -756,6 +756,10 @@
 
     if (!confirmed) {
       return;
+    }
+
+    if (triggerButton) {
+      window.BNB.setBusy(triggerButton, true);
     }
 
     setLoadingState(true);
@@ -972,9 +976,8 @@
           return;
         }
 
-        await updateItemQuantity(
-          productId,
-          currentQuantity + 1
+        await window.BNB.withBusy(upButton, () =>
+          updateItemQuantity(productId, currentQuantity + 1)
         );
 
         return;
@@ -1011,9 +1014,8 @@
           return;
         }
 
-        await updateItemQuantity(
-          productId,
-          currentQuantity - 1
+        await window.BNB.withBusy(downButton, () =>
+          updateItemQuantity(productId, currentQuantity - 1)
         );
 
         return;
@@ -1032,7 +1034,7 @@
             'data-page-remove'
           );
 
-        await removeItem(productId);
+        await removeItem(productId, removeButton);
       }
     });
   }
@@ -1068,6 +1070,7 @@
        * checkout.js/order integration will handle order
        * creation and Stripe payment against the backend.
        */
+      window.BNB.setBusy(button, true);
       window.location.href = 'checkout.html';
     });
   }

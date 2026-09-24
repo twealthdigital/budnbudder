@@ -2265,17 +2265,26 @@ maxInput.value =
       return;
     }
 
-    const originalText =
-      button
-        ? button.textContent
-        : '';
+    const textEl = button
+      ? button.querySelector('.product-card__add-text')
+      : null;
+
+    const originalText = button
+      ? (textEl ? textEl.textContent : button.textContent)
+      : '';
+
+    const setLabel = (value) => {
+      if (!button) return;
+      if (textEl) {
+        textEl.textContent = value;
+      } else {
+        button.textContent = value;
+      }
+    };
 
     if (button) {
-      button.disabled =
-        true;
-
-      button.textContent =
-        'Adding…';
+      window.BNB.setBusy(button, true);
+      button.disabled = true;
     }
 
     try {
@@ -2285,26 +2294,27 @@ maxInput.value =
       );
 
       if (button) {
-        button.textContent =
-          'Added';
+        window.BNB.setBusy(button, false);
+        setLabel('Added');
 
-        setTimeout(
-          () => {
-            if (
-              document.body.contains(
-                button
-              )
-            ) {
-              button.disabled =
-                false;
+        if (textEl) {
+          button.classList.add('is-added');
+        }
 
-              button.textContent =
-                originalText ||
-                'Add to Cart';
+        setTimeout(() => {
+          if (document.body.contains(button)) {
+            button.disabled = false;
+
+            if (textEl) {
+              button.classList.remove('is-added');
+              setTimeout(() => {
+                setLabel(originalText || 'Add to Cart');
+              }, 400);
+            } else {
+              setLabel(originalText || 'Add to Cart');
             }
-          },
-          1000
-        );
+          }
+        }, 1800);
       }
 
       if (
@@ -2329,12 +2339,10 @@ maxInput.value =
       );
 
       if (button) {
-        button.disabled =
-          false;
-
-        button.textContent =
-          originalText ||
-          'Add to Cart';
+        window.BNB.setBusy(button, false);
+        button.disabled = false;
+        button.classList.remove('is-added');
+        setLabel(originalText || 'Add to Cart');
       }
 
       showToast(

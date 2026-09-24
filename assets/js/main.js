@@ -53,3 +53,77 @@
     initRevealAnimations();
   });
 })();
+
+/* =====================================================
+   BUSY-BUTTON SYSTEM (reusable loading spinner)
+   ===================================================== */
+(function () {
+  'use strict';
+
+  window.BNB = window.BNB || {};
+
+  function setBusy(btn, on) {
+    if (!btn) return;
+
+    if (on) {
+      if (btn.classList.contains('is-busy')) return;
+
+      const cs = getComputedStyle(btn);
+
+      /* Spinner takes the button's own text colour */
+      btn.style.setProperty('--busy-color', cs.color);
+
+      /* Spinner scales with the button (12px – 18px) */
+      const size = Math.round(
+        Math.min(btn.offsetWidth, btn.offsetHeight) * 0.5
+      );
+      btn.style.setProperty(
+        '--busy-size',
+        Math.max(12, Math.min(18, size)) + 'px'
+      );
+
+      /* The spinner is absolutely positioned inside the button */
+      if (cs.position === 'static') {
+        btn.style.position = 'relative';
+        btn.dataset.busyPos = '1';
+      }
+
+      btn.classList.add('is-busy');
+      btn.setAttribute('aria-busy', 'true');
+      return;
+    }
+
+    btn.classList.remove('is-busy');
+    btn.removeAttribute('aria-busy');
+    btn.style.removeProperty('--busy-color');
+    btn.style.removeProperty('--busy-size');
+
+    if (btn.dataset.busyPos) {
+      btn.style.position = '';
+      delete btn.dataset.busyPos;
+    }
+  }
+
+  /* Shows the spinner while `task` (a function returning a promise) runs */
+  async function withBusy(btn, task) {
+    if (!btn) return task();
+    if (btn.classList.contains('is-busy')) return; // ignore double-clicks
+
+    setBusy(btn, true);
+
+    try {
+      return await task();
+    } finally {
+      setBusy(btn, false);
+    }
+  }
+
+  window.BNB.setBusy = setBusy;
+  window.BNB.withBusy = withBusy;
+
+  /* Back/forward cache: never come back to a stuck spinner */
+  window.addEventListener('pageshow', (e) => {
+    if (!e.persisted) return;
+    document.querySelectorAll('.is-busy').forEach((b) => setBusy(b, false));
+  });
+})();

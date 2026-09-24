@@ -693,7 +693,7 @@ async function getProducts(options = {}) {
           addBtn.getAttribute('data-add');
 
         try {
-          await addToCart(productId);
+          await window.BNB.withBusy(addBtn, () => addToCart(productId));
 
           addBtn.classList.add('is-added');
 
@@ -715,7 +715,7 @@ async function getProducts(options = {}) {
           upBtn.getAttribute('data-qty-up');
 
         try {
-          await changeQty(productId, 1);
+          await window.BNB.withBusy(upBtn, () => changeQty(productId, 1));
         } catch (_) {}
 
         return;
@@ -729,7 +729,7 @@ async function getProducts(options = {}) {
           downBtn.getAttribute('data-qty-down');
 
         try {
-          await changeQty(productId, -1);
+          await window.BNB.withBusy(downBtn, () => changeQty(productId, -1));
         } catch (_) {}
 
         return;
@@ -743,7 +743,7 @@ async function getProducts(options = {}) {
           removeBtn.getAttribute('data-remove');
 
         try {
-          await removeFromCart(productId);
+          await window.BNB.withBusy(removeBtn, () => removeFromCart(productId));
         } catch (_) {}
 
         return;
@@ -756,6 +756,7 @@ async function getProducts(options = {}) {
       checkoutBtn.addEventListener('click', () => {
         if (cartCount() <= 0) return;
 
+        window.BNB.setBusy(checkoutBtn, true);
         window.location.href = 'cart.html';
       });
     }
