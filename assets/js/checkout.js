@@ -38,20 +38,6 @@
     window.BNB_API_BASE_URL ||
     'https://budnbudder-backend.onrender.com/api';
 
-  /*
-   * The Stripe publishable key is safe to use in frontend
-   * JavaScript. Prefer defining it globally if your project
-   * already provides it:
-   *
-   * window.BNB_STRIPE_PUBLISHABLE_KEY = 'pk_test_...';
-   *
-   * If it is not defined, the value below should be replaced
-   * with the STRIPE_PUBLISHABLE_KEY from your backend .env.
-   */
-  const STRIPE_PUBLISHABLE_KEY =
-    window.BNB_STRIPE_PUBLISHABLE_KEY ||
-    '';
-
   const TAX_RATE_DISPLAY = 0.0875;
 
   const state = {
@@ -62,15 +48,7 @@
   shipping: 0,
   total: 0,
   loading: false,
-  submitting: false,
-
-  stripe: null,
-  stripeReady: false,
-
-  elements: null,
-  paymentElement: null,
-  paymentIntentCreated: false,
-  clientSecret: null
+  submitting: false
 };
 
   /* =====================================================
@@ -237,180 +215,7 @@
     return data;
   }
 
-  /* =====================================================
-     LOAD STRIPE.JS
-     ===================================================== */
 
-  function loadStripeScript() {
-    return new Promise((resolve, reject) => {
-      if (
-        window.Stripe &&
-        typeof window.Stripe === 'function'
-      ) {
-        resolve(window.Stripe);
-        return;
-      }
-
-      const existing =
-        document.querySelector(
-          'script[data-bnb-stripe]'
-        );
-
-      if (existing) {
-        existing.addEventListener(
-          'load',
-          () => {
-            if (window.Stripe) {
-              resolve(window.Stripe);
-            } else {
-              reject(
-                new Error(
-                  'Stripe.js loaded but Stripe is unavailable.'
-                )
-              );
-            }
-          },
-          { once: true }
-        );
-
-        existing.addEventListener(
-          'error',
-          () => {
-            reject(
-              new Error(
-                'Unable to load Stripe.js.'
-              )
-            );
-          },
-          { once: true }
-        );
-
-        return;
-      }
-
-      const script =
-        document.createElement('script');
-
-      script.src =
-        'https://js.stripe.com/v3/';
-
-      script.async = true;
-      script.dataset.bnbStripe = 'true';
-
-      script.onload = () => {
-        if (
-          window.Stripe &&
-          typeof window.Stripe === 'function'
-        ) {
-          resolve(window.Stripe);
-        } else {
-          reject(
-            new Error(
-              'Stripe.js loaded but Stripe is unavailable.'
-            )
-          );
-        }
-      };
-
-      script.onerror = () => {
-        reject(
-          new Error(
-            'Unable to load Stripe.js.'
-          )
-        );
-      };
-
-      document.head.appendChild(script);
-    });
-  }
-
-  async function initializeStripe() {
-    if (state.stripeReady) {
-      return state.stripe;
-    }
-
-    if (!STRIPE_PUBLISHABLE_KEY) {
-      throw new Error(
-        'Stripe is not configured on the checkout page. Set BNB_STRIPE_PUBLISHABLE_KEY to your Stripe publishable key.'
-      );
-    }
-
-    const StripeConstructor =
-      await loadStripeScript();
-
-    state.stripe =
-      StripeConstructor(
-        STRIPE_PUBLISHABLE_KEY
-      );
-
-    state.stripeReady = true;
-
-    return state.stripe;
-  }
-
-  async function initializePaymentElement(clientSecret) {
-  const stripe = await initializeStripe();
-
-  if (!stripe) {
-    throw new Error(
-      'Stripe could not be initialized.'
-    );
-  }
-
-  const paymentContainer =
-    $('#payment-element');
-
-  const paymentCard =
-    $('#paymentCard');
-
-  if (!paymentContainer || !paymentCard) {
-    throw new Error(
-      'Payment form could not be found.'
-    );
-  }
-
-  // Prevent creating multiple Payment Elements
-  if (state.paymentElement) {
-    return;
-  }
-
-  state.elements = stripe.elements({
-    clientSecret
-  });
-
-  state.paymentElement =
-    state.elements.create('payment', {
-      layout: 'tabs'
-    });
-
-  state.paymentElement.mount(
-    '#payment-element'
-  );
-
-  paymentCard.hidden = false;
-
-  state.paymentElement.on(
-    'change',
-    (event) => {
-      const paymentError =
-        $('#paymentError');
-
-      if (!paymentError) {
-        return;
-      }
-
-      if (event.error) {
-        paymentError.textContent =
-          event.error.message || '';
-
-        paymentError.hidden = false;
-      } else {
-        paymentError.textContent = '';
-        paymentError.hidden = true;
-      }
-    }
-  );
-}
 
   /* =====================================================
      POPULATE STATES
@@ -1384,57 +1189,6 @@
   }
 
   /* =====================================================
-     CONFIRM STRIPE PAYMENT
-     ===================================================== */
-
-  async function confirmStripePayment() {
-  const stripe = await initializeStripe();
-
-  if (!stripe) {
-    throw new Error(
-      'Stripe could not be initialized.'
-    );
-  }
-
-  if (!state.elements) {
-    throw new Error(
-      'Payment form has not been initialized.'
-    );
-  }
-
-  const result = await stripe.confirmPayment({
-    elements: state.elements,
-
-    confirmParams: {
-      return_url:
-        window.location.origin +
-        '/success.html'
-    },
-
-    redirect: 'if_required'
-  });
-
-  if (result.error) {
-    throw new Error(
-      result.error.message ||
-      'Payment could not be completed.'
-    );
-  }
-
-  if (
-    result.paymentIntent &&
-    (
-      result.paymentIntent.status === 'succeeded' ||
-      result.paymentIntent.status === 'processing'
-    )
-  ) {
-    return result.paymentIntent;
-  }
-
-  return result.paymentIntent || null;
-}
-
-  /* =====================================================
      CHECKOUT SUBMISSION
      ===================================================== */
 
@@ -1486,64 +1240,7 @@
 
   /*
    * ------------------------------------------
-   * STEP 2: If payment form already exists,
-   * confirm the payment.
-   * ------------------------------------------
-   */
-
-  if (
-    state.paymentIntentCreated &&
-    state.elements
-  ) {
-    state.submitting = true;
-
-    showProcessing();
-    setSubmitLoading(true);
-
-    try {
-      const paymentIntent =
-        await confirmStripePayment();
-
-      if (
-        paymentIntent &&
-        (
-          paymentIntent.status === 'succeeded' ||
-          paymentIntent.status === 'processing'
-        )
-      ) {
-        window.location.href =
-          'success.html';
-
-        return;
-      }
-
-      throw new Error(
-        'Payment was not completed. Please try again.'
-      );
-
-    } catch (error) {
-      console.error(
-        'Stripe confirmation error:',
-        error
-      );
-
-      hideProcessing();
-      setSubmitLoading(false);
-
-      state.submitting = false;
-
-      showBanner(
-        error.message ||
-        'Something went wrong while processing your payment.'
-      );
-
-      return;
-    }
-  }
-
-  /*
-   * ------------------------------------------
-   * STEP 3: Refresh cart
+   * STEP 2: Refresh cart
    * ------------------------------------------
    */
 
@@ -1631,66 +1328,49 @@
           String(payment.orderId)
         );
       }
+
+      /*
+       * Hand the PaymentIntent + order summary off to
+       * payment.html, which mounts the Stripe Payment
+       * Element and confirms the payment there.
+       */
+
+      sessionStorage.setItem(
+        'bnb_checkout_client_secret',
+        payment.clientSecret
+      );
+
+      sessionStorage.setItem(
+        'bnb_checkout_amount',
+        String(payment.amount)
+      );
+
+      sessionStorage.setItem(
+        'bnb_checkout_summary',
+        JSON.stringify({
+          items: state.cartItems.map((item) => {
+            const product = getProduct(item);
+
+            return {
+              name: product?.name || 'Product',
+              image: product?.image || '',
+              price: Number(product?.price || 0),
+              quantity: Number(item.quantity || 0)
+            };
+          }),
+          subtotal: state.subtotal,
+          tax: state.tax,
+          shipping: state.shipping,
+          total: state.total
+        })
+      );
     } catch (_) {}
 
     /*
-     * Store the PaymentIntent information
+     * Payment details are entered on payment.html.
      */
 
-    state.clientSecret =
-      payment.clientSecret;
-
-    /*
-     * Create Stripe Payment Element
-     */
-
-    await initializePaymentElement(
-      payment.clientSecret
-    );
-
-    state.paymentIntentCreated = true;
-
-    /*
-     * Change button to actual payment button
-     */
-
-    const button =
-      $('#proceedPaymentBtn');
-
-    const label =
-      button?.querySelector(
-        '.btn-label'
-      );
-
-    if (label) {
-      label.textContent =
-        `Pay ${money(payment.amount)}`;
-    }
-
-    /*
-     * We are NOT processing the payment yet.
-     * The customer needs to enter payment details.
-     */
-
-    hideProcessing();
-
-    setSubmitLoading(false);
-
-    state.submitting = false;
-
-    /*
-     * Scroll the payment section into view
-     */
-
-    const paymentCard =
-      $('#paymentCard');
-
-    if (paymentCard) {
-      paymentCard.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      });
-    }
+    window.location.href = 'payment.html';
 
   } catch (error) {
     console.error(
