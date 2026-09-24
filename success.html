@@ -25,20 +25,44 @@
   <!-- ============================= -->
   <section class="success-section">
     <div class="container success-layout">
-      <div class="success-card">
-
-        <div class="success-card__icon">
-          <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <!-- CHECKING (default) -->
+        <div data-state="checking">
+          <div class="success-card__icon success-card__icon--pending">
+            <span class="success-card__spinner"></span>
+          </div>
+          <h1 class="success-card__title">Confirming your payment…</h1>
+          <p class="success-card__sub">Please don't close this page. This only takes a few seconds.</p>
         </div>
 
-        <h1 class="success-card__title">Order Placed Successfully!</h1>
-        <p class="success-card__sub">Thanks for shopping with us. We have received your order and we are getting it ready. You will be notified as it moves along.</p>
+        <!-- SUCCESS -->
+        <div data-state="success" hidden>
+          <div class="success-card__icon">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h1 class="success-card__title">Order Placed Successfully!</h1>
+          <p class="success-card__sub">Thanks for shopping with us. We have received your order and we are getting it ready. You will be notified as it moves along.</p>
+          <a href="order.html" class="btn btn--primary success-card__btn">View My Orders</a>
+        </div>
 
-        <a href="order.html" class="btn btn--primary success-card__btn">
-          View My Orders
-        </a>
+        <!-- STILL CONFIRMING -->
+        <div data-state="pending" hidden>
+          <div class="success-card__icon success-card__icon--pending">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h1 class="success-card__title">Still confirming your payment</h1>
+          <p class="success-card__sub">Your bank is taking a little longer than usual. Check My Orders in a few minutes to see the final status.</p>
+          <a href="order.html" class="btn btn--primary success-card__btn">View My Orders</a>
+        </div>
 
-      </div>
+        <!-- NO ORDER FOUND -->
+        <div data-state="unknown" hidden>
+          <div class="success-card__icon success-card__icon--pending">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.2"/><path d="M12 8v5M12 16.5v.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          </div>
+          <h1 class="success-card__title">No recent order found</h1>
+          <p class="success-card__sub">We couldn't find an order from this session. If you just paid, check My Orders.</p>
+          <a href="order.html" class="btn btn--primary success-card__btn">View My Orders</a>
+        </div>
     </div>
   </section>
 

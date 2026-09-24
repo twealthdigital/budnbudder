@@ -71,3 +71,28 @@
   .success-section { padding: 44px 0; }
   .success-card { padding: 40px 24px; border-radius: var(--radius-md); }
 }
+
+/* ---------- STATES ---------- */
+[data-state][hidden] { display: none !important; }
+
+.success-card__icon--failed {
+  background: #fdecec;
+  border-color: #f5c2c2;
+  color: #c0392b;
+}
+.success-card__icon--pending {
+  background: #fff6dc;
+  border-color: #f3dc94;
+  color: #b58900;
+}
+.success-card__spinner {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 3px solid rgba(181, 137, 0, 0.25);
+  border-top-color: #b58900;
+  animation: success-spin 0.8s linear infinite;
+}
+@keyframes success-spin { to { transform: rotate(360deg); } }
+
+.success-card__btn + .success-card__btn { margin-top: 12px; }
