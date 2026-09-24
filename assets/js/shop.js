@@ -2325,13 +2325,6 @@ maxInput.value =
         window.BNB.closeSearch();
       }
 
-      if (
-        window.BNB &&
-        typeof window.BNB.openCart ===
-          'function'
-      ) {
-        window.BNB.openCart();
-      }
     } catch (error) {
       console.error(
         'Add to cart failed:',

@@ -457,9 +457,12 @@
   pointer-events: none;
   transform: none;
 }
-.product-card__add.is-added .product-card__add-text {
-  max-width: 60px;
-  opacity: 1;
+/* Loading spinner: match the icon colour, keep the button black */
+.product-card__add.is-busy,
+.product-card__add.is-busy:hover {
+  --busy-color: var(--color-yellow) !important;
+  background: var(--color-black);
+  transform: none;
 }
 
 /* ---------- TESTIMONIALS ---------- */

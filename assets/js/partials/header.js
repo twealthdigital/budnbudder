@@ -307,19 +307,15 @@ async function getProducts(options = {}) {
      * Count total units, not distinct products.
      */
     if (!cart && cartState) {
-      return getCartItems().reduce(
-        (total, item) =>
-          total + (Number(item.quantity) || 0),
-        0
-      );
+      return getCartItems().filter(
+        (item) => (Number(item.quantity) || 0) > 0
+      ).length;
     }
 
     if (cart && typeof cart === 'object') {
-      return Object.values(cart).reduce(
-        (total, quantity) =>
-          total + (Number(quantity) || 0),
-        0
-      );
+      return Object.values(cart).filter(
+        (quantity) => (Number(quantity) || 0) > 0
+      ).length;
     }
 
     return 0;

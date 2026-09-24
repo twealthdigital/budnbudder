@@ -795,11 +795,6 @@
           1
         );
 
-        if (
-          typeof window.BNB.openCart === 'function'
-        ) {
-          window.BNB.openCart();
-        }
 
       } catch (error) {
 
