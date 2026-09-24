@@ -641,26 +641,21 @@ async function loadProducts() {
           return;
         }
 
+        const saveBtn =
+          e.target.querySelector('button[type="submit"]');
+
         try {
-          const result = id
-            ? await apiRequest(
-                `/api/admin/categories/${id}`,
-                {
+          const result = await window.AdminUI.withBusy(saveBtn, () =>
+            id
+              ? apiRequest(`/api/admin/categories/${id}`, {
                   method: "PATCH",
-                  body: JSON.stringify({
-                    name
-                  })
-                }
-              )
-            : await apiRequest(
-                "/api/admin/categories",
-                {
+                  body: JSON.stringify({ name })
+                })
+              : apiRequest("/api/admin/categories", {
                   method: "POST",
-                  body: JSON.stringify({
-                    name
-                  })
-                }
-              );
+                  body: JSON.stringify({ name })
+                })
+          );
 
           const savedCategory =
             result?.category || null;
@@ -801,11 +796,11 @@ async function loadProducts() {
           pendingDeleteCategoryId;
 
         try {
-          await apiRequest(
-            `/api/admin/categories/${categoryId}`,
-            {
+          await window.AdminUI.withBusy(
+            document.getElementById("confirmDeleteCategoryBtn"),
+            () => apiRequest(`/api/admin/categories/${categoryId}`, {
               method: "DELETE"
-            }
+            })
           );
 
           if (
@@ -1235,6 +1230,7 @@ fileInput &&
             "Uploading image...";
         }
 
+        window.AdminUI.setBusy(uploadBtn, true);
         uploadBtn.disabled = true;
 
         const formData =
@@ -1304,6 +1300,7 @@ fileInput &&
         fileInput.value = "";
 
       } finally {
+        window.AdminUI.setBusy(uploadBtn, false);
         uploadBtn.disabled = false;
       }
     }
@@ -1413,28 +1410,21 @@ fileInput &&
         tagLabel
       };
 
+      const saveBtn =
+        e.target.querySelector('button[type="submit"]');
+
       try {
-        if (id) {
-          await apiRequest(
-            `/api/admin/products/${id}`,
-            {
-              method: "PATCH",
-              body: JSON.stringify(
-                payload
-              )
-            }
-          );
-        } else {
-          await apiRequest(
-            "/api/admin/products",
-            {
-              method: "POST",
-              body: JSON.stringify(
-                payload
-              )
-            }
-          );
-        }
+        await window.AdminUI.withBusy(saveBtn, () =>
+          id
+            ? apiRequest(`/api/admin/products/${id}`, {
+                method: "PATCH",
+                body: JSON.stringify(payload)
+              })
+            : apiRequest("/api/admin/products", {
+                method: "POST",
+                body: JSON.stringify(payload)
+              })
+        );
 
         closeProductModal();
 
@@ -1497,12 +1487,12 @@ fileInput &&
     const productId = pendingDeleteId;
 
     try {
-      await apiRequest(
-  `/api/admin/products/${productId}`,
-  {
-    method: "DELETE"
-  }
-);
+      await window.AdminUI.withBusy(
+        document.getElementById("confirmDeleteBtn"),
+        () => apiRequest(`/api/admin/products/${productId}`, {
+          method: "DELETE"
+        })
+      );
 
       closeConfirmModal();
 

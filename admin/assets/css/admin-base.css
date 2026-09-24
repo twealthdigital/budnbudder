@@ -584,3 +584,33 @@ h1, h2, h3, h4 {
     min-width: 0;
   }
 }
+
+
+/* =====================================================
+   BUSY BUTTON (reusable loading spinner)
+   ===================================================== */
+.is-busy {
+  color: transparent !important;
+  pointer-events: none;
+  cursor: progress;
+}
+.is-busy > * { visibility: hidden; }
+.is-busy::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--busy-size, 16px);
+  height: var(--busy-size, 16px);
+  margin: calc(var(--busy-size, 16px) / -2) 0 0 calc(var(--busy-size, 16px) / -2);
+  border-radius: 50%;
+  border: 2px solid rgba(128, 128, 128, 0.3);
+  border: 2px solid color-mix(in srgb, var(--busy-color, #000) 25%, transparent);
+  border-top-color: var(--busy-color, #000);
+  animation: admin-busy-spin 0.7s linear infinite;
+}
+@keyframes admin-busy-spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .is-busy::after { animation-duration: 1.2s !important; }
+}

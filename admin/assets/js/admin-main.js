@@ -214,3 +214,67 @@ function initLogoutButtons() {
   admin: null
 };
 })();
+
+/* =====================================================
+   BUSY-BUTTON SYSTEM (reusable loading spinner)
+   ===================================================== */
+(function () {
+  "use strict";
+
+  window.AdminUI = window.AdminUI || {};
+
+  function setBusy(btn, on) {
+    if (!btn) return;
+
+    if (on) {
+      if (btn.classList.contains("is-busy")) return;
+
+      const cs = getComputedStyle(btn);
+
+      btn.style.setProperty("--busy-color", cs.color);
+
+      const size = Math.round(
+        Math.min(btn.offsetWidth, btn.offsetHeight) * 0.5
+      );
+      btn.style.setProperty(
+        "--busy-size",
+        Math.max(12, Math.min(18, size)) + "px"
+      );
+
+      if (cs.position === "static") {
+        btn.style.position = "relative";
+        btn.dataset.busyPos = "1";
+      }
+
+      btn.classList.add("is-busy");
+      btn.setAttribute("aria-busy", "true");
+      return;
+    }
+
+    btn.classList.remove("is-busy");
+    btn.removeAttribute("aria-busy");
+    btn.style.removeProperty("--busy-color");
+    btn.style.removeProperty("--busy-size");
+
+    if (btn.dataset.busyPos) {
+      btn.style.position = "";
+      delete btn.dataset.busyPos;
+    }
+  }
+
+  async function withBusy(btn, task) {
+    if (!btn) return task();
+    if (btn.classList.contains("is-busy")) return; // ignore double-clicks
+
+    setBusy(btn, true);
+
+    try {
+      return await task();
+    } finally {
+      setBusy(btn, false);
+    }
+  }
+
+  window.AdminUI.setBusy = setBusy;
+  window.AdminUI.withBusy = withBusy;
+})();
