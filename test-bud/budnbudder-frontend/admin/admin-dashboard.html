@@ -118,6 +118,22 @@
         Add New Product
       </a>
 
+      <!-- ===== EARNINGS OVERVIEW ===== -->
+      <section class="admin-card earnings-panel" aria-label="Earnings overview">
+        <div class="earnings-panel__head">
+          <h3>
+            Earnings Overview
+            <button type="button" class="earnings-reload" id="earningsReloadBtn" aria-label="Reload earnings">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 11A8 8 0 1 0 18.5 15.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 5V11H14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </h3>
+          <span class="earnings-panel__updated" id="earningsUpdated">Updating…</span>
+        </div>
+        <div class="earnings-grid" id="earningsGrid">
+          <!-- injected by dashboard.js: Today (24h) / This Week (7d) / This Month (30d) -->
+        </div>
+      </section>
+
       <!-- ===== STAT CARDS ===== -->
       <section class="stat-grid" id="statGrid" aria-label="Store totals">
         <!-- injected by dashboard.js -->
@@ -142,21 +158,7 @@
         </div>
       </section>
 
-      <!-- ===== EARNINGS OVERVIEW ===== -->
-      <section class="admin-card earnings-panel" aria-label="Earnings overview">
-        <div class="earnings-panel__head">
-          <h3>
-            Earnings Overview
-            <button type="button" class="earnings-reload" id="earningsReloadBtn" aria-label="Reload earnings">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 11A8 8 0 1 0 18.5 15.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 5V11H14" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-          </h3>
-          <span class="earnings-panel__updated" id="earningsUpdated">Updating…</span>
-        </div>
-        <div class="earnings-grid" id="earningsGrid">
-          <!-- injected by dashboard.js: Today (24h) / This Week (7d) / This Month (30d) -->
-        </div>
-      </section>
+
 
       <!-- ===== RECENT ORDERS + TRANSACTION HISTORY ===== -->
       <section class="dash-grid">
