@@ -16,11 +16,11 @@
    * window.BNB_API_BASE_URL = 'https://api.example.com/api';
    *
    * Local development defaults to the backend project:
-   * http://https://budnbudder-backend.onrender.com/api
+   * https://budnbudder-backend.onrender.com/api
    */
   const API_BASE =
     window.BNB_API_BASE_URL ||
-    'http://https://budnbudder-backend.onrender.com/api';
+    'https://budnbudder-backend.onrender.com/api';
 
   const money = (n) => {
     const value = Number(n);

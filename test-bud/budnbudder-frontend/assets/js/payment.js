@@ -3,7 +3,7 @@
   'use strict';
 
   const $ = (sel, ctx) => (ctx || document).querySelector(sel);
-  const API_BASE = window.BNB_API_BASE_URL || 'http://https://budnbudder-backend.onrender.com/api';
+  const API_BASE = window.BNB_API_BASE_URL || 'https://budnbudder-backend.onrender.com/api';
   let STRIPE_PUBLISHABLE_KEY = window.BNB_STRIPE_PUBLISHABLE_KEY || '';
   const state = { stripe: null, elements: null, paymentElement: null, submitting: false };
 

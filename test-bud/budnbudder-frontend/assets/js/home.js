@@ -27,7 +27,7 @@
   const API_BASE =
     window.BNB_API_BASE_URL ||
     window.BNB?.API_BASE ||
-    'http://https://budnbudder-backend.onrender.com/api';
+    'https://budnbudder-backend.onrender.com/api';
 
   let ALL_PRODUCTS = [];
   let BEST_SELLERS = [];

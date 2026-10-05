@@ -9,7 +9,7 @@
 (function () {
   "use strict";
 
-  const API_BASE_URL = "http://https://budnbudder-backend.onrender.com";
+  const API_BASE_URL = "https://budnbudder-backend.onrender.com";
 
   function initSidebar() {
     const sidebar = document.getElementById("adminSidebar");

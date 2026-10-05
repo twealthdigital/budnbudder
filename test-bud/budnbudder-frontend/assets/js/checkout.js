@@ -36,7 +36,7 @@
 
   const API_BASE =
     window.BNB_API_BASE_URL ||
-    'http://https://budnbudder-backend.onrender.com/api';
+    'https://budnbudder-backend.onrender.com/api';
 
   const TAX_RATE_DISPLAY = 0.0875;
 

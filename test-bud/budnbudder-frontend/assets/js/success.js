@@ -30,7 +30,7 @@
      ===================================================== */
   const API_BASE =
     window.BNB_API_BASE_URL ||
-    'http://https://budnbudder-backend.onrender.com/api';
+    'https://budnbudder-backend.onrender.com/api';
 
   const LAST_ORDER_ID_KEY = 'bnb_last_order_id';
   const LAST_ORDER_NUMBER_KEY = 'bnb_last_order_number';

@@ -19,7 +19,7 @@
 (function () {
   "use strict";
 
-    const API_BASE_URL = "http://https://budnbudder-backend.onrender.com";
+    const API_BASE_URL = "https://budnbudder-backend.onrender.com";
 
   const EYE_OPEN = '<path d="M2 12C2 12 5.5 5.5 12 5.5C18.5 5.5 22 12 22 12C22 12 18.5 18.5 12 18.5C5.5 18.5 2 12 2 12Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/>';
   const EYE_CLOSED = '<path d="M3 3L21 21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M10.6 5.6C11 5.55 11.5 5.5 12 5.5C18.5 5.5 22 12 22 12C22 12 20.8 14.2 18.5 16M6.3 6.9C3.6 8.8 2 12 2 12C2 12 5.5 18.5 12 18.5C13.6 18.5 15 18.1 16.2 17.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.9 10C9.5 10.4 9.2 11 9.2 11.7C9.2 13 10.3 14 11.5 14C12.2 14 12.8 13.7 13.2 13.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>';

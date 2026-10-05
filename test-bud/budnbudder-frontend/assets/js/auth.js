@@ -7,7 +7,7 @@
    * ============================================================
    *
    * Backend:
-   * http://https://budnbudder-backend.onrender.com/api/auth
+   * https://budnbudder-backend.onrender.com/api/auth
    *
    * Authentication uses an HTTP-only cookie set by the backend.
    *
@@ -19,7 +19,7 @@
 
   const API_BASE =
     window.BNB_API_BASE_URL ||
-    "http://https://budnbudder-backend.onrender.com/api";
+    "https://budnbudder-backend.onrender.com/api";
 
   const AUTH_BASE =
     `${API_BASE}/auth`;
