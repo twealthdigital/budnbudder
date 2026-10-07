@@ -699,11 +699,22 @@
         );
       }
 
-      /*
-       * The backend sets the HTTP-only adminToken cookie.
-       * We deliberately do NOT store the token in localStorage
-       * or sessionStorage.
-       */
+      // Keep the HTTP-only cookie as the primary session mechanism.
+      // Safari/iOS may block that cross-site cookie, so the backend also
+      // returns a short-lived JWT that we can send as a Bearer token.
+      if (data.token) {
+        try {
+          if (remember) {
+            localStorage.setItem("budnbudder_admin_token", data.token);
+            sessionStorage.removeItem("budnbudder_admin_token");
+          } else {
+            sessionStorage.setItem("budnbudder_admin_token", data.token);
+            localStorage.removeItem("budnbudder_admin_token");
+          }
+        } catch (storageError) {
+          console.warn("Could not persist admin session token:", storageError);
+        }
+      }
 
       window.location.href = "admin-dashboard.html";
 

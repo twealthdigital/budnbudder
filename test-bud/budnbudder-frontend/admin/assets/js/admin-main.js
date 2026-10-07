@@ -11,6 +11,41 @@
 
   const API_BASE_URL = "https://budnbudder-backend.onrender.com";
 
+  function getAdminToken() {
+    try {
+      return sessionStorage.getItem("budnbudder_admin_token") ||
+        localStorage.getItem("budnbudder_admin_token") ||
+        "";
+    } catch (err) {
+      return "";
+    }
+  }
+
+  // Add the Safari-safe Bearer token to admin API requests. The normal
+  // HTTP-only cookie is still sent with credentials: include when available.
+  const nativeFetch = window.fetch.bind(window);
+  window.fetch = function (input, init) {
+    init = init || {};
+    const url = typeof input === "string" ? input : input.url;
+    const isAdminApi = typeof url === "string" &&
+      url.indexOf(API_BASE_URL + "/api/admin/") === 0;
+
+    if (!isAdminApi) return nativeFetch(input, init);
+
+    const token = getAdminToken();
+    if (!token) return nativeFetch(input, init);
+
+    const headers = new Headers(init.headers || (input && input.headers) || {});
+    if (!headers.has("Authorization")) {
+      headers.set("Authorization", "Bearer " + token);
+    }
+
+    return nativeFetch(input, Object.assign({}, init, {
+      headers,
+      credentials: init.credentials || "include"
+    }));
+  };
+
   function initSidebar() {
     const sidebar = document.getElementById("adminSidebar");
     const toggleBtn = document.getElementById("adminSidebarToggle");
@@ -109,6 +144,12 @@
   } catch (err) {
     console.error("Admin logout error:", err);
   } finally {
+    try {
+      localStorage.removeItem("budnbudder_admin_token");
+      sessionStorage.removeItem("budnbudder_admin_token");
+    } catch (storageError) {
+      console.warn("Could not clear admin session token:", storageError);
+    }
     window.location.href = "admin-auth.html?mode=logout";
   }
 }
